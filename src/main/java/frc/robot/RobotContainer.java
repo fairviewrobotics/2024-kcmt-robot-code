@@ -4,14 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.OperatorConstants;
-//import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommands;
-//import frc.robot.commands.ExampleCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -58,6 +55,10 @@ public class RobotContainer {
                     true,
                     true
             )
+    );
+
+    new JoystickButton(primaryController, XboxController.Button.kY.value).whileTrue(
+            new RunCommand(() -> swerveSubsystem.zeroGyro())
     );
   }
 
