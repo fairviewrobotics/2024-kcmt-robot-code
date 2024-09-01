@@ -33,9 +33,15 @@ public class AimSubsystem extends SubsystemBase {
      * @param angle Set the target angle for the shooter in radians
      */
     public void setAngle(double angle) {
-        angle = Math.clamp(angle, Math.toRadians(10), Math.PI/2);
+        angle = Math.clamp(angle, AimConstants.ANGLE_MIN, AimConstants.ANGLE_MAX);
         double pidValue = aimPID.calculate(aimEncoder.getPosition(), angle);
 
+        leftMotor.set(pidValue);
+        rightMotor.set(pidValue);
+    }
+
+    public void reset() {
+        double pidValue = aimPID.calculate(aimEncoder.getPosition(), AimConstants.DEFAULT_ANGLE);
         leftMotor.set(pidValue);
         rightMotor.set(pidValue);
     }
