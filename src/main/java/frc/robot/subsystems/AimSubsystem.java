@@ -40,6 +40,10 @@ public class AimSubsystem extends SubsystemBase {
         rightMotor.set(pidValue);
     }
 
+    public boolean atTargetAngle() {
+        return this.aimPID.atSetpoint();
+    }
+
     public void reset() {
         double pidValue = aimPID.calculate(aimEncoder.getPosition(), AimConstants.DEFAULT_ANGLE);
         leftMotor.set(pidValue);

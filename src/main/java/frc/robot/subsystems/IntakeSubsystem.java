@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.utils.CANUtils;
 
+import java.util.function.Function;
+
 public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax topMotor = CANUtils.configure(new CANSparkMax(IntakeConstants.TOP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
 
@@ -16,6 +18,10 @@ public class IntakeSubsystem extends SubsystemBase {
     private final DigitalInput frontLinebreak = new DigitalInput(IntakeConstants.FRONT_LINEBREAK);
 
     private final DigitalInput backLinebreak = new DigitalInput(IntakeConstants.BACK_LINEBREAK);
+
+    private boolean preBackState;
+
+    private boolean preFrontState;
 
     /**
      * Subsystem for controlling the intake
@@ -26,16 +32,16 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     /**
-     * Set the speed of the top intake motor
-     * @param speed The target speed of the top motor
+     * Set the speed of the top intake motor in %
+     * @param speed The target speed of the top motor in %
      */
     public void setTopSpeed(double speed) {
         topMotor.set(speed);
     }
 
     /**
-     * Set the speed of the bottom intake motor
-     * @param speed The target speed of the bottom motor
+     * Set the speed of the bottom intake motor in %
+     * @param speed The target speed of the bottom motor in %
      */
     public void setBottomSpeed(double speed) {
         bottomMotor.set(speed);
@@ -43,8 +49,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /**
      * Set the speed of the intake motors
-     * @param top The target left speed
-     * @param bottom The target right speed
+     * @param top The target left speed in %
+     * @param bottom The target right speed in %
      */
     public void setSpeed(double top, double bottom) {
         this.setTopSpeed(top);
@@ -61,10 +67,21 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /**
      * Check if the back linebreak is activated
-     * @return If the back linbreak is activated
+     * @return If the back linebreak is activated
      */
     public boolean getBackLinebreak() {
         return !backLinebreak.get();
+    }
+
+    /**
+     * Runs something every time the front limelights state changes
+     * @param r A {@link Runnable} to run when the state changes
+     */
+    public void frontChangeListener(Runnable r) {
+        if (preFrontState != getFrontLinebreak()) {
+            preFrontState = !preFrontState;
+            r.run();
+        }
     }
 
 }
