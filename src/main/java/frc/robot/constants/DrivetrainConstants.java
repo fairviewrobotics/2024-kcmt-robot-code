@@ -11,12 +11,12 @@ public class DrivetrainConstants {
     public static final double maxSpeedMetersPerSecond = 6;
     public static final double maxAngularSpeed = 2 * Math.PI;
 
-    public static final double directionSlewRate = 20; // rads/sec - turning was 4.0
-    public static final double magnitudeSlewRate = 1000; // percent/second (1 = 100%) - forward/backward/traverse - was 20.0
-    public static final double rotationalSlewRate = 1000; // percent/second (1 = 100%) - rotation was 50.0
+    public static final double directionSlewRate = 18.0; // rads/sec - turning was 4.0
+    public static final double magnitudeSlewRate = 22.0; // percent/second (1 = 100%) - forward/backward/traverse - was 20.0
+    public static final double rotationalSlewRate = 30.0; // percent/second (1 = 100%) - rotation was 50.0
 
     public static final double drivingSpeedScalar = -4.0; //make positive so gyroreset with intake forward
-    public static final double rotationSpeedScalar = -3 * Math.PI;//make positive so gyroreset with intake forward
+    public static final double rotationSpeedScalar = 3 * Math.PI;//make positive so gyroreset with intake forward
 
     public static final double trackWidth = Units.inchesToMeters(20);
     public static final double wheelBase = Units.inchesToMeters(16);
@@ -28,10 +28,10 @@ public class DrivetrainConstants {
             new Translation2d(-wheelBase / 2, -trackWidth / 2)
     );
 
-    public static final double frontLeftChassisAngularOffset = 0.0;
-    public static final double frontRightChassisAngularOffset = 0.0;
-    public static final double rearLeftChassisAngularOffset = 0.0;
-    public static final double rearRightChassisAngularOffset = 0.0;
+    public static final double frontLeftChassisAngularOffset = 3.850;
+    public static final double frontRightChassisAngularOffset = 2.023 + Math.PI;
+    public static final double rearLeftChassisAngularOffset = 3.231 - Math.PI;
+    public static final double rearRightChassisAngularOffset = 0.943 + Math.PI;
 
     public static final int frontLeftDrivingPort = 3;
     public static final int rearLeftDrivingPort = 5;
@@ -73,6 +73,7 @@ public class DrivetrainConstants {
     public static final double drivingFF = 1.0 / driveWheelFreeSpeedRps;
     public static final double drivingMinOutput = -1.0;
     public static final double drivingMaxOutput = 1.0;
+
 
     public static final double turningP = 0.6;
     public static final double turningI = 0.0;
