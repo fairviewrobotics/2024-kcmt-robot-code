@@ -4,16 +4,25 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DriveCommands;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.subsystems.AimSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.constants.Constants.Target;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,13 +33,26 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  AimSubsystem aimSubsystem = new AimSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   XboxController primaryController = new XboxController(0);
   XboxController secondaryController = new XboxController(1);
 
+  SendableChooser<Command> superSecretMissileTech = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    NamedCommands.registerCommand("AutoSpinUp", new SpinUpCommand(Target.SPEAKER, shooterSubsystem));
+    NamedCommands.registerCommand("AutoIntake", new IntakeCommand(intakeSubsystem));
+    NamedCommands.registerCommand("AutoShoot", new ShootCommand(intakeSubsystem));
+    NamedCommands.registerCommand("AutoAim", new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.SPEAKER));
+
+    superSecretMissileTech = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("AutoChooser", superSecretMissileTech);
+
     // Configure the trigger bindings
     configureButtonBindings();
   }
@@ -45,7 +67,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureButtonBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+    // PRIMARY CONTROLLER
     swerveSubsystem.setDefaultCommand(
             new DriveCommands(
                     swerveSubsystem,
@@ -56,9 +79,67 @@ public class RobotContainer {
                     true
             )
     );
-
+    new JoystickButton(primaryController, XboxController.Button.kRightBumper.value).whileTrue(
+            new DriveCommands(
+                    swerveSubsystem,
+                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar/2.0,
+                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar/2.0,
+                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar/2.0,
+                    true,
+                    true
+            )
+    );
     new JoystickButton(primaryController, XboxController.Button.kY.value).whileTrue(
             new RunCommand(() -> swerveSubsystem.zeroGyro())
+    );
+
+    new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value).whileTrue(
+            new ShootCommand(intakeSubsystem)
+    );
+
+
+
+
+    // SECONDARY CONTROLLER
+
+    new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
+            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
+    );
+
+    new JoystickButton(secondaryController, XboxController.Axis.kLeftTrigger.value).whileTrue(
+            new SpinUpCommand(Target.HIGH_PASS, shooterSubsystem)
+    );
+    new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
+            new ParallelCommandGroup(
+                    new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
+                    new IntakeCommand(intakeSubsystem)
+            )
+    );
+    new JoystickButton(secondaryController, XboxController.Button.kX.value).whileTrue(
+            new ParallelCommandGroup(
+                    new RotateTo(swerveSubsystem, primaryController, Target.AMP),
+                    new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.AMP),
+                    new SpinUpCommand(Target.AMP, shooterSubsystem)
+
+            )
+    );
+    new JoystickButton(secondaryController, XboxController.Button.kY.value).whileTrue(
+            new ParallelCommandGroup(
+                    new RotateTo(swerveSubsystem, primaryController, Target.HIGH_PASS),
+                    new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.HIGH_PASS)
+            )
+    );
+    new JoystickButton(secondaryController, XboxController.Button.kB.value).whileTrue(
+            new ParallelCommandGroup(
+                    new RotateTo(swerveSubsystem, primaryController, Target.LOW_PASS),
+                    new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.LOW_PASS)
+            )
+    );
+    new JoystickButton(secondaryController, XboxController.Button.kA.value).whileTrue(
+            new ParallelCommandGroup(
+                    new RotateTo(swerveSubsystem, primaryController, Target.SPEAKER),
+                    new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.SPEAKER)
+            )
     );
   }
 
@@ -69,6 +150,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new InstantCommand();
+    return superSecretMissileTech.getSelected();
   }
 }
