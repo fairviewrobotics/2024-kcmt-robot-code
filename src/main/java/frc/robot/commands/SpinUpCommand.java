@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Target;
+import frc.robot.constants.Constants.Target;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class SpinUpCommand extends Command {
@@ -27,10 +28,12 @@ public class SpinUpCommand extends Command {
     @Override
     public void execute() {
         switch (this.target) {
-            case AMP ->
+            case AMP, AMP_SHOOT ->
                 shooterSubsystem.setShooterSpeed(1000, 1000);
-            case SPEAKER ->
+            case SPEAKER, LOW_PASS ->
                 shooterSubsystem.setShooterSpeed(6500, 6500);
+            case HIGH_PASS ->
+                shooterSubsystem.setShooterSpeed(ShooterConstants.PASS_RPM, ShooterConstants.PASS_RPM);
         }
     }
 }
