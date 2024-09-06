@@ -1,19 +1,29 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 public class AimConstants {
     public static final int LEFT_MOTOR_ID = 0;
 
     public static final int RIGHT_MOTOR_ID = 0;
 
-    public static final double AIM_P = 0.8;
-
+    public static final double AIM_P = 0.0;
     public static final double AIM_I = 0;
-
     public static final double AIM_D = 0;
+    public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(Math.PI/2, Math.PI/4);
+
+    public static final double AIM_KS = 0.0; //Value of static force; depends on mechanism
+    public static final double AIM_KG = 0.0; //Increase until position holds
+    public static final double AIM_KV = 0.0; //Increase until arm sort of tracks a setpoint
+    public static final double AIM_KA = 0.0; //Do not change
 
     public static final double DEFAULT_ANGLE = Math.toRadians(20);
 
     public static final double ANGLE_MAX = Math.PI/2;
 
     public static final double ANGLE_MIN = Math.toRadians(10);
+
+    public static final double AIM_TOLERANCE = Math.toRadians(1);
+    
+
 }
