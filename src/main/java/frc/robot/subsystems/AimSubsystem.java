@@ -4,13 +4,11 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.AimConstants;
 import frc.robot.utils.CANUtils;
 import frc.robot.utils.MathUtils;
-import java.lang.Math;
 
 public class AimSubsystem extends SubsystemBase {
     private final CANSparkMax leftMotor = CANUtils.configure(new CANSparkMax(AimConstants.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
@@ -37,7 +35,7 @@ public class AimSubsystem extends SubsystemBase {
      * Subsystem for aiming the shooter
      */
     public AimSubsystem() {
-        // Might need to reverse one of the motors idk
+        // TODO: reverse the motors if needed
         leftMotor.setInverted(true);
         rightMotor.setInverted(true);
 
@@ -74,7 +72,7 @@ public class AimSubsystem extends SubsystemBase {
 
     /**
      * Reset the PID controller for the shooter movement
-     * This should be called everytime the a command that uses the PID controller is started
+     * This should be called everytime a command that uses the PID controller is started
      */
     public void resetPID() {
         aimPID.reset(aimEncoder.getPosition());

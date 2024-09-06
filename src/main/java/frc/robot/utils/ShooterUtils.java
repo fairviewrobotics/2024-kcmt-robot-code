@@ -2,7 +2,6 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import frc.robot.constants.ShooterConstants;
 
 import java.util.function.Function;
 
@@ -48,9 +47,7 @@ public class ShooterUtils {
         };
 
         // Solve the equation using a numerical method called bisection
-        double angle = findRoot(equation, 0, 90);  // Finding root between 0 and 90 degrees
-
-        return angle;
+        return findRoot(equation, 0, 90);
     }
 
     /**
@@ -101,9 +98,7 @@ public class ShooterUtils {
         };
 
         // Use the bisection method to find the angle θ that ensures the conditions are met
-        double angle = findRoot(equation, 0, 90);
-
-        return angle;
+        return findRoot(equation, 0, 90);
     }
 
     /**

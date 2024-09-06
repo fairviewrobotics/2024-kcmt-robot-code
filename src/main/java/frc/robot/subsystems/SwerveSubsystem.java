@@ -73,12 +73,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // Slew Rate Time
     private double previousTime = WPIUtilJNI.now() * 1e-6;
 
-    // Limelight Network Table
-    // Relay data to driverstation using network table
-
-
-    // Convert Gyro angle to radians(-2pi to 2pi
-
     // Swerve Odometry
     /*
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
@@ -142,7 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
             .getTable("Swerve").getDoubleTopic("rlpos").getEntry(rearLeft.getPosition().angle.getRadians());
 
     /**
-     * This subsystems manages all of the swerve drive logic and also gives data to odometry
+     * This subsystem manages all the swerve drive logic and also gives data to odometry
      */
     public SwerveSubsystem() {
         // PathPlanner stuff
@@ -192,17 +186,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // Add vision measurement to odometry
         Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
-
-//        System.out.println(visionMeasurement.getY());
-//        System.out.println(visionMeasurement.getX());
-//
-//        System.out.println(VisionUtils.getDistanceFromTag());
-//        if (DriverStation.isAutonomous() && (Math.abs(getRobotRelativeSpeeds().vxMetersPerSecond) > 0.2 ||
-//                Math.abs(getRobotRelativeSpeeds().vyMetersPerSecond) > 0.2 ||
-//                Math.abs(getRobotRelativeSpeeds().omegaRadiansPerSecond) > Math.PI/6))
-//            visionMeasurement = new Pose3d();
-
-//        System.out.println(getPose());
 
         if (Math.abs(visionMeasurement.getY()) != 0 && Math.abs(visionMeasurement.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
             distanceToTag = VisionUtils.getDistanceFromTag();
@@ -389,7 +372,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         if (rateLimit) {
 
-            // Scary math that calculates important stuff about where the robot is heading
+            //Math that calculates important stuff about where the robot is heading
             double inputTranslationDirection = Math.atan2(sidewaysMetersPerSecond, forwardMetersPerSecond);
             double inputTranslationMagnitude = Math.sqrt(Math.pow(forwardMetersPerSecond, 2.0) + Math.pow(sidewaysMetersPerSecond, 2.0));
 
@@ -445,7 +428,7 @@ public class SwerveSubsystem extends SubsystemBase {
         double ySpeedDelivered = ySpeedCommanded;
         double rotationDelivered = currentRotation;
 
-        // Field relative is easier for drivers I think.
+        // Field relative is easier for drivers.
         SwerveModuleState[] swerveModuleStates;
         if (fieldRelative) {
             swerveModuleStates = DrivetrainConstants.driveKinematics.toSwerveModuleStates(
@@ -520,7 +503,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         if (desiredStates.length != 4) {
-            System.out.println(String.format("Incorrect length of desiredStates, got %d expected 4", desiredStates.length));
+            System.out.printf("Incorrect length of desiredStates, got %d expected 4%n", desiredStates.length);
         }
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DrivetrainConstants.maxSpeedMetersPerSecond);
 
