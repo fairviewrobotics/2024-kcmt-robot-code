@@ -55,9 +55,13 @@ public class AimSubsystem extends SubsystemBase {
         rightMotor.setVoltage(pidValue + ffValue);
     }
 
+    public boolean atTargetAngle() {
+        return this.aimPID.atSetpoint();
+    }
     /**
      * Reset the shooter to the default angle
      */
+
     public void reset() {
         double pidValue = aimPID.calculate(aimEncoder.getPosition(), AimConstants.DEFAULT_ANGLE);
         double ffValue = aimFF.calculate(AimConstants.DEFAULT_ANGLE, 0);
