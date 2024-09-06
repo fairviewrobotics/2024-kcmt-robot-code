@@ -61,7 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /**
      * Check if the back linebreak is activated
-     * @return If the back linbreak is activated
+     * @return If the back linebreak is activated
      */
     public boolean getBackLinebreak() {
         return !backLinebreak.get();

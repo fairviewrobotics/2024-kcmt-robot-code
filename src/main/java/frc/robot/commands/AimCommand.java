@@ -29,7 +29,7 @@ public class AimCommand extends Command {
      * Command to aim the shooter
      * @param aimSubsystem Instance of {@link AimSubsystem}
      * @param swerveSubsystem Instance of {@link SwerveSubsystem}
-     * @param controller The {@link XboxController} that will exectute amp shooting
+     * @param controller The {@link XboxController} that will execute amp shooting
      * @param target The {@link Target} to aim the shooter at
      */
     public AimCommand(AimSubsystem aimSubsystem, SwerveSubsystem swerveSubsystem, XboxController controller, Target target) {
