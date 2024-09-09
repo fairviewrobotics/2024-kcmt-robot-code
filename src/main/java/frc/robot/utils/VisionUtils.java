@@ -1,10 +1,15 @@
 package frc.robot.utils;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+
+import java.util.Optional;
 
 public class VisionUtils {
 
@@ -21,6 +26,11 @@ public class VisionUtils {
      */
     public static void visionEnabled(boolean b) {
         enabled = b;
+    }
+
+    public static Optional<EstimatedRobotPose> getEstimatedGlobalPose(PhotonPoseEstimator poseEstimator, Pose2d prevPose) {
+        poseEstimator.setReferencePose(prevPose);
+        return poseEstimator.update();
     }
 
     /**

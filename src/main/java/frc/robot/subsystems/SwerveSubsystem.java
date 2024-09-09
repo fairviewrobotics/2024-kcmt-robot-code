@@ -5,13 +5,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -29,8 +28,12 @@ import frc.robot.controllers.SwerveModuleControlller;
 import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.SwerveUtils;
 import frc.robot.utils.VisionUtils;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class SwerveSubsystem extends SubsystemBase {
     // Defining Motors
@@ -113,6 +116,24 @@ public class SwerveSubsystem extends SubsystemBase {
             VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10))
     );
 
+    private final PhotonCamera cam1 = new PhotonCamera(NetworkTableInstance.getDefault(), "AprilTag");
+    private final Transform3d cam1Transform = new Transform3d(new Translation3d(0.1, 0.1, 0.1), new Rotation3d());
+
+    private final PhotonCamera cam2 = new PhotonCamera(NetworkTableInstance.getDefault(), "AprilTag2");
+    private final Transform3d cam2Transform = new Transform3d(new Translation3d(0.1, 0.1, 0.1), new Rotation3d());
+
+    private final PhotonPoseEstimator cam1PoseEstimator = new PhotonPoseEstimator(
+            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+            PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            cam1, cam1Transform
+    );
+
+    private final PhotonPoseEstimator cam2PoseEstimator = new PhotonPoseEstimator(
+            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+            PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            cam2, cam2Transform
+    );
+
     // Network Tables Telemetry
 
     private final NetworkTableUtils NTUtils = new NetworkTableUtils("Debug");
@@ -190,8 +211,26 @@ public class SwerveSubsystem extends SubsystemBase {
                 }
         );
 
+        EstimatedRobotPose cam1EPose = VisionUtils.getEstimatedGlobalPose(cam1PoseEstimator, poseEstimator.getEstimatedPosition()).orElse(null);
+        EstimatedRobotPose cam2EPose = VisionUtils.getEstimatedGlobalPose(cam2PoseEstimator, poseEstimator.getEstimatedPosition()).orElse(null);
+        Pose2d visionEstimate;
+        try {
+            visionEstimate = new Pose2d(
+                    new Translation2d(
+                        (cam1EPose.estimatedPose.toPose2d().getX() + cam2EPose.estimatedPose.toPose2d().getX())/2,
+                        (cam1EPose.estimatedPose.toPose2d().getY() + cam2EPose.estimatedPose.toPose2d().getY())/2),
+                    Rotation2d.fromRadians(
+                            (cam1EPose.estimatedPose.toPose2d().getRotation().getRadians() + cam2EPose.estimatedPose.toPose2d().getRotation().getRadians())/2
+                    )
+
+            );
+        } catch (Exception e) {
+            System.out.println("[WARN] Failed to get vision pose: " + e);
+            visionEstimate = new Pose2d();
+        }
+
         // Add vision measurement to odometry
-        Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
+//        Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
 
 //        System.out.println(visionMeasurement.getY());
 //        System.out.println(visionMeasurement.getX());
@@ -204,7 +243,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
 //        System.out.println(getPose());
 
-        if (Math.abs(visionMeasurement.getY()) != 0 && Math.abs(visionMeasurement.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
+        if (Math.abs(visionEstimate.getY()) != 0 && Math.abs(visionEstimate.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
             distanceToTag = VisionUtils.getDistanceFromTag();
 
 
@@ -234,8 +273,8 @@ public class SwerveSubsystem extends SubsystemBase {
             }
             poseEstimator.addVisionMeasurement(
                     new Pose2d(
-                            new Translation2d(visionMeasurement.getX(), visionMeasurement.getY()),
-                            visionMeasurement.getRotation().toRotation2d()
+                            new Translation2d(visionEstimate.getX(), visionEstimate.getY()),
+                            visionEstimate.getRotation()
                     ),
                     Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0));
         }
