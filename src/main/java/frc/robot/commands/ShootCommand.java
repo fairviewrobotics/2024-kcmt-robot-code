@@ -24,12 +24,12 @@ public class ShootCommand extends Command {
 
     @Override
     public void execute() {
-        intakeSubsystem.setSpeed(0.3, 0.3);
+        intakeSubsystem.setSpeed(0.3);
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.setSpeed(0, 0);
+        intakeSubsystem.setSpeed(0);
     }
 
 }

@@ -9,7 +9,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -31,26 +30,33 @@ import frc.robot.constants.Constants.Target;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // Subsystems
   SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   AimSubsystem aimSubsystem = new AimSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Controllers
   XboxController primaryController = new XboxController(0);
   XboxController secondaryController = new XboxController(1);
 
+  // Auto Chooser
   SendableChooser<Command> superSecretMissileTech = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    NamedCommands.registerCommand("AutoSpinUp", new SpinUpCommand(Target.SPEAKER, shooterSubsystem));
-    NamedCommands.registerCommand("AutoIntake", new IntakeCommand(intakeSubsystem));
-    NamedCommands.registerCommand("AutoShoot", new ShootCommand(intakeSubsystem));
-    NamedCommands.registerCommand("AutoAim", new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.SPEAKER));
 
+    // Register commands for PathPlanner
+    NamedCommands.registerCommand("AutoSpinUp", new SpinUpCommand(Target.SPEAKER, shooterSubsystem).withTimeout(20));
+    NamedCommands.registerCommand("AutoIntake", new IntakeCommand(intakeSubsystem, false).withTimeout(1.5));
+    NamedCommands.registerCommand("AutoIntakeContinuous4", new IntakeCommand(intakeSubsystem, true).withTimeout(4.0));
+    NamedCommands.registerCommand("AutoIntakeContinuous1.5", new IntakeCommand(intakeSubsystem, true).withTimeout(1.5));
+    NamedCommands.registerCommand("AutoShoot", new ShootCommand(intakeSubsystem).withTimeout(0.3));
+    NamedCommands.registerCommand("AutoAim", new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.SPEAKER).withTimeout(20));
+
+    // Set up auto chooser
     superSecretMissileTech = AutoBuilder.buildAutoChooser();
+    // Put the chooser on the dashboard
     SmartDashboard.putData("AutoChooser", superSecretMissileTech);
 
     // Configure the trigger bindings
@@ -67,8 +73,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureButtonBindings() {
+    // Default commands
+    aimSubsystem.setDefaultCommand(
+            new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.NOTE)
+    );
+
 
     // PRIMARY CONTROLLER
+
+    // Default drive command
     swerveSubsystem.setDefaultCommand(
             new DriveCommands(
                     swerveSubsystem,
@@ -79,6 +92,8 @@ public class RobotContainer {
                     true
             )
     );
+
+    // Slow drive command: Right bumper
     new JoystickButton(primaryController, XboxController.Button.kRightBumper.value).whileTrue(
             new DriveCommands(
                     swerveSubsystem,
@@ -89,10 +104,13 @@ public class RobotContainer {
                     true
             )
     );
+
+    // Zero gyro: Y button
     new JoystickButton(primaryController, XboxController.Button.kY.value).whileTrue(
             new RunCommand(() -> swerveSubsystem.zeroGyro())
     );
 
+    // Shoot(run intake forward): Left bumper
     new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value).whileTrue(
             new ShootCommand(intakeSubsystem)
     );
@@ -102,19 +120,25 @@ public class RobotContainer {
 
     // SECONDARY CONTROLLER
 
+    // Spin up shooter fast: Left bumper
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
             new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
     );
 
+    // Spin up shooter slow: Left trigger
     new JoystickButton(secondaryController, XboxController.Axis.kLeftTrigger.value).whileTrue(
             new SpinUpCommand(Target.HIGH_PASS, shooterSubsystem)
     );
+
+    // Intake + rotate to note: Right bumper
     new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
             new ParallelCommandGroup(
                     new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
-                    new IntakeCommand(intakeSubsystem)
+                    new IntakeCommand(intakeSubsystem, false)
             )
     );
+
+    // Raise shooter + rotate to amp + spin up for amp: X button
     new JoystickButton(secondaryController, XboxController.Button.kX.value).whileTrue(
             new ParallelCommandGroup(
                     new RotateTo(swerveSubsystem, primaryController, Target.AMP),
@@ -123,18 +147,24 @@ public class RobotContainer {
 
             )
     );
+
+    // Rotate to high pass + aim at high pass: Y button
     new JoystickButton(secondaryController, XboxController.Button.kY.value).whileTrue(
             new ParallelCommandGroup(
                     new RotateTo(swerveSubsystem, primaryController, Target.HIGH_PASS),
                     new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.HIGH_PASS)
             )
     );
+
+    // Rotate to low pass + aim at low pass: B button
     new JoystickButton(secondaryController, XboxController.Button.kB.value).whileTrue(
             new ParallelCommandGroup(
                     new RotateTo(swerveSubsystem, primaryController, Target.LOW_PASS),
                     new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.LOW_PASS)
             )
     );
+
+    // Rotate to speaker + aim at speaker: A button
     new JoystickButton(secondaryController, XboxController.Button.kA.value).whileTrue(
             new ParallelCommandGroup(
                     new RotateTo(swerveSubsystem, primaryController, Target.SPEAKER),
@@ -149,7 +179,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return superSecretMissileTech.getSelected();
   }
 }

@@ -79,7 +79,7 @@ public class AimCommand extends Command {
                 return ShooterUtils.calculateShooterAngle(
                         robotPose,
                         speakerPose,
-                        ShooterConstants.MAX_RPM,
+                        ShooterConstants.SPEAKER_RPM,
                         ShooterConstants.SHOOTER_WHEEL_DIAMETER,
                         ShooterConstants.SHOOTER_HEIGHT
                 );
@@ -102,4 +102,5 @@ public class AimCommand extends Command {
             }
         }
     }
+
 }

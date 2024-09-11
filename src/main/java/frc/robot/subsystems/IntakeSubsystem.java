@@ -11,16 +11,16 @@ import frc.robot.utils.CANUtils;
 import java.util.function.Function;
 
 public class IntakeSubsystem extends SubsystemBase {
+    // Motors
     private final CANSparkMax topMotor = CANUtils.configure(new CANSparkMax(IntakeConstants.TOP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
-
     private final CANSparkMax bottomMotor = CANUtils.configure(new CANSparkMax(IntakeConstants.BOTTOM_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
 
+    // Linebreaks
     private final DigitalInput frontLinebreak = new DigitalInput(IntakeConstants.FRONT_LINEBREAK);
-
     private final DigitalInput backLinebreak = new DigitalInput(IntakeConstants.BACK_LINEBREAK);
 
+    // States
     private boolean preBackState;
-
     private boolean preFrontState;
 
     /**
@@ -29,32 +29,19 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
         topMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+
+        topMotor.setInverted(false);
+
+        bottomMotor.follow(topMotor, true);
     }
 
+
     /**
-     * Set the speed of the top intake motor in %
-     * @param speed The target speed of the top motor in %
+     * Set the speed of the intake motor
+     * @param speed The target speed in %
      */
-    public void setTopSpeed(double speed) {
+    public void setSpeed(double speed) {
         topMotor.set(speed);
-    }
-
-    /**
-     * Set the speed of the bottom intake motor in %
-     * @param speed The target speed of the bottom motor in %
-     */
-    public void setBottomSpeed(double speed) {
-        bottomMotor.set(speed);
-    }
-
-    /**
-     * Set the speed of the intake motors
-     * @param top The target left speed in %
-     * @param bottom The target right speed in %
-     */
-    public void setSpeed(double top, double bottom) {
-        this.setTopSpeed(top);
-        this.setBottomSpeed(bottom);
     }
 
     /**
