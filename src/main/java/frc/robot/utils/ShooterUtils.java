@@ -2,7 +2,6 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import frc.robot.constants.ShooterConstants;
 
 import java.util.function.Function;
 
@@ -19,7 +18,7 @@ public class ShooterUtils {
      * @param shooterRPM The RPM of the shooter
      * @param wheelDiameter The diameter of the shooter wheel
      * @param shooterHeight The height of the shooter
-     * @return The angle of the shooter
+     * @return The angle of the shooter in radians
      */
     public static double calculateShooterAngle(
             Pose2d robotPose, Pose3d targetPose,
@@ -42,15 +41,15 @@ public class ShooterUtils {
 
         // This is an anonymous function for use with the numerical solver
         Function<Double, Double> equation = (theta) -> {
-            double thetaRad = Math.toRadians(theta);
+//            double thetaRad = Math.toRadians(theta);
+            double thetaRad = theta;
             return deltaH - (d * Math.tan(thetaRad)) +
                     ((g * d * d) / (2 * v0 * v0 * Math.cos(thetaRad) * Math.cos(thetaRad)));
         };
 
         // Solve the equation using a numerical method called bisection
-        double angle = findRoot(equation, 0, 90);  // Finding root between 0 and 90 degrees
-
-        return angle;
+//        return findRoot(equation, 0, 90);
+        return findRoot(equation, 0, Math.PI/2);
     }
 
     /**
@@ -61,7 +60,7 @@ public class ShooterUtils {
      * @param wheelDiameter The diameter of the shooter wheel
      * @param shooterHeight The height of the shooter
      * @param minHeight The minimum height of the shot (generally, height of stage)
-     * @return The angle of the shooter
+     * @return The angle of the shooter in radians
      */
     public static double calculateShooterAngleForPass(
             Pose2d robotPose, Pose2d targetPose,
@@ -81,7 +80,8 @@ public class ShooterUtils {
 
         // Define a function to solve for the angle θ
         Function<Double, Double> equation = (theta) -> {
-            double thetaRad = Math.toRadians(theta);
+//            double thetaRad = Math.toRadians(theta);
+            double thetaRad = theta;
 
             // Calculate the time to reach the target horizontally
             double t = d / (v0 * Math.cos(thetaRad));
@@ -101,9 +101,8 @@ public class ShooterUtils {
         };
 
         // Use the bisection method to find the angle θ that ensures the conditions are met
-        double angle = findRoot(equation, 0, 90);
-
-        return angle;
+//        return findRoot(equation, 0, 90);
+        return findRoot(equation, 0, Math.PI/2);
     }
 
     /**
@@ -111,7 +110,7 @@ public class ShooterUtils {
      * @param equation The function to solve
      * @param min The minimum value to search
      * @param max The maximum value to search
-     * @return The root of the function
+     * @return The root of the function within the tolerance
      */
     public static double findRoot(Function<Double, Double> equation, double min, double max) {
         double tolerance = 1e-6;

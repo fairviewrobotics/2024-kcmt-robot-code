@@ -24,16 +24,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.VisionConstants;
 import frc.robot.controllers.SwerveModuleControlller;
 import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.SwerveUtils;
 import frc.robot.utils.VisionUtils;
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonVersion;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
 public class SwerveSubsystem extends SubsystemBase {
     // Defining Motors
@@ -76,12 +77,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // Slew Rate Time
     private double previousTime = WPIUtilJNI.now() * 1e-6;
 
-    // Limelight Network Table
-    // Relay data to driverstation using network table
-
-
-    // Convert Gyro angle to radians(-2pi to 2pi
-
     // Swerve Odometry
     /*
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
@@ -97,6 +92,12 @@ public class SwerveSubsystem extends SubsystemBase {
      */
 
     private double distanceToTag = 1.0;
+
+    private PhotonCamera cam = VisionUtils.getPhotonAprilCamera();
+
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    Transform3d robotToCam = VisionUtils.getPhotonAprilRobotToCamera();
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cam, robotToCam);
 
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
             DrivetrainConstants.driveKinematics,
@@ -114,24 +115,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
             // How much we trust the vision measurements
             VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10))
-    );
-
-    private final PhotonCamera cam1 = new PhotonCamera(NetworkTableInstance.getDefault(), "AprilTag");
-    private final Transform3d cam1Transform = new Transform3d(new Translation3d(0.1, 0.1, 0.1), new Rotation3d());
-
-    private final PhotonCamera cam2 = new PhotonCamera(NetworkTableInstance.getDefault(), "AprilTag2");
-    private final Transform3d cam2Transform = new Transform3d(new Translation3d(0.1, 0.1, 0.1), new Rotation3d());
-
-    private final PhotonPoseEstimator cam1PoseEstimator = new PhotonPoseEstimator(
-            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-            PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-            cam1, cam1Transform
-    );
-
-    private final PhotonPoseEstimator cam2PoseEstimator = new PhotonPoseEstimator(
-            AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-            PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-            cam2, cam2Transform
     );
 
     // Network Tables Telemetry
@@ -163,7 +146,7 @@ public class SwerveSubsystem extends SubsystemBase {
             .getTable("Swerve").getDoubleTopic("rlpos").getEntry(rearLeft.getPosition().angle.getRadians());
 
     /**
-     * This subsystems manages all of the swerve drive logic and also gives data to odometry
+     * This subsystem manages all the swerve drive logic and also gives data to odometry
      */
     public SwerveSubsystem() {
         // PathPlanner stuff
@@ -195,6 +178,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         NTUtils.setDouble("Gyro Angle", gyro.getAngle());
+
 //        if (!DriverStation.isAutonomous())
 //            gyro.setAngleAdjustment(180);
 //        else
@@ -211,39 +195,12 @@ public class SwerveSubsystem extends SubsystemBase {
                 }
         );
 
-        EstimatedRobotPose cam1EPose = VisionUtils.getEstimatedGlobalPose(cam1PoseEstimator, poseEstimator.getEstimatedPosition()).orElse(null);
-        EstimatedRobotPose cam2EPose = VisionUtils.getEstimatedGlobalPose(cam2PoseEstimator, poseEstimator.getEstimatedPosition()).orElse(null);
-        Pose2d visionEstimate;
-        try {
-            visionEstimate = new Pose2d(
-                    new Translation2d(
-                        (cam1EPose.estimatedPose.toPose2d().getX() + cam2EPose.estimatedPose.toPose2d().getX())/2,
-                        (cam1EPose.estimatedPose.toPose2d().getY() + cam2EPose.estimatedPose.toPose2d().getY())/2),
-                    Rotation2d.fromRadians(
-                            (cam1EPose.estimatedPose.toPose2d().getRotation().getRadians() + cam2EPose.estimatedPose.toPose2d().getRotation().getRadians())/2
-                    )
-
-            );
-        } catch (Exception e) {
-            System.out.println("[WARN] Failed to get vision pose: " + e);
-            visionEstimate = new Pose2d();
-        }
+        Optional<EstimatedRobotPose> estimatedRobotPose = VisionUtils.getEstimatedGlobalPose(photonPoseEstimator, poseEstimator.getEstimatedPosition());
 
         // Add vision measurement to odometry
-//        Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
+        Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
 
-//        System.out.println(visionMeasurement.getY());
-//        System.out.println(visionMeasurement.getX());
-//
-//        System.out.println(VisionUtils.getDistanceFromTag());
-//        if (DriverStation.isAutonomous() && (Math.abs(getRobotRelativeSpeeds().vxMetersPerSecond) > 0.2 ||
-//                Math.abs(getRobotRelativeSpeeds().vyMetersPerSecond) > 0.2 ||
-//                Math.abs(getRobotRelativeSpeeds().omegaRadiansPerSecond) > Math.PI/6))
-//            visionMeasurement = new Pose3d();
-
-//        System.out.println(getPose());
-
-        if (Math.abs(visionEstimate.getY()) != 0 && Math.abs(visionEstimate.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
+        if (Math.abs(visionMeasurement.getY()) != 0 && Math.abs(visionMeasurement.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
             distanceToTag = VisionUtils.getDistanceFromTag();
 
 
@@ -271,12 +228,19 @@ public class SwerveSubsystem extends SubsystemBase {
                         VecBuilder.fill(9999, 9999, 9999)
                 );
             }
+
             poseEstimator.addVisionMeasurement(
-                    new Pose2d(
-                            new Translation2d(visionEstimate.getX(), visionEstimate.getY()),
-                            visionEstimate.getRotation()
-                    ),
-                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0));
+                    visionMeasurement.toPose2d(),
+                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
+            );
+
+            if (estimatedRobotPose.isPresent()) {
+                poseEstimator.addVisionMeasurement(
+                        estimatedRobotPose.get().estimatedPose.toPose2d(),
+                        estimatedRobotPose.get().timestampSeconds
+                );
+            }
+
         }
 
         frontrightpos.set(frontRight.getPosition().angle.getRadians());
@@ -428,7 +392,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         if (rateLimit) {
 
-            // Scary math that calculates important stuff about where the robot is heading
+            //Math that calculates important stuff about where the robot is heading
             double inputTranslationDirection = Math.atan2(sidewaysMetersPerSecond, forwardMetersPerSecond);
             double inputTranslationMagnitude = Math.sqrt(Math.pow(forwardMetersPerSecond, 2.0) + Math.pow(sidewaysMetersPerSecond, 2.0));
 
@@ -484,7 +448,7 @@ public class SwerveSubsystem extends SubsystemBase {
         double ySpeedDelivered = ySpeedCommanded;
         double rotationDelivered = currentRotation;
 
-        // Field relative is easier for drivers I think.
+        // Field relative is easier for drivers.
         SwerveModuleState[] swerveModuleStates;
         if (fieldRelative) {
             swerveModuleStates = DrivetrainConstants.driveKinematics.toSwerveModuleStates(
@@ -559,7 +523,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         if (desiredStates.length != 4) {
-            System.out.println(String.format("Incorrect length of desiredStates, got %d expected 4", desiredStates.length));
+            System.out.printf("Incorrect length of desiredStates, got %d expected 4%n", desiredStates.length);
         }
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DrivetrainConstants.maxSpeedMetersPerSecond);
 

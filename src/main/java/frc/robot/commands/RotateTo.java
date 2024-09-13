@@ -113,7 +113,7 @@ public class RotateTo extends Command {
                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? -Math.PI / 2 : Math.PI / 2);
         }
 
-        if (this.target == Target.NOTE && seeNote == 0.0) {
+        if ((this.target == Target.NOTE && seeNote == 0.0) || Math.abs(controller.getRightX()) > 0.05) {
             swerveSubsystem.drive(
                     controller.getLeftY() * DrivetrainConstants.drivingSpeedScalar,
                     controller.getLeftX() * DrivetrainConstants.drivingSpeedScalar,

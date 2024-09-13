@@ -6,9 +6,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 
 public class ShooterConstants {
-    public static final double MAX_RPM = 6500;
+    public static final double MAX_MOTOR_RPM = 6500; //TODO: tune
 
-    public static final double PASS_RPM = 4500;
+    public static final double MOTOR_TO_WHEEL_RATIO = 1; //TODO: tune
+
+    public static final double SPEAKER_RPM = 8000; //TODO: tune
+
+    public static final double PASS_RPM = 4500; //TODO: tune
+
+    public static final double AMP_RPM = 1000; //TODO: tune
 
     public static final int TOP_MOTOR_ID = 0;
 
