@@ -11,12 +11,14 @@ import frc.robot.utils.CANUtils;
 import frc.robot.utils.MathUtils;
 
 public class AimSubsystem extends SubsystemBase {
+    // Motors
     private final CANSparkMax leftMotor = CANUtils.configure(new CANSparkMax(AimConstants.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
-
     private final CANSparkMax rightMotor = CANUtils.configure(new CANSparkMax(AimConstants.RIGHT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
 
+    // Absolute encoder TODO: determine if this will be actually used
     private final SparkAbsoluteEncoder aimEncoder = leftMotor.getAbsoluteEncoder();
 
+    // PID controller
     private final ProfiledPIDController aimPID = new ProfiledPIDController(
             AimConstants.AIM_P,
             AimConstants.AIM_I,
@@ -24,6 +26,7 @@ public class AimSubsystem extends SubsystemBase {
             AimConstants.CONSTRAINTS
     );
 
+    // Feedforward controller
     private final ArmFeedforward aimFF = new ArmFeedforward(
             AimConstants.AIM_KS,
             AimConstants.AIM_KG,
@@ -36,8 +39,9 @@ public class AimSubsystem extends SubsystemBase {
      */
     public AimSubsystem() {
         // TODO: reverse the motors if needed
-        leftMotor.setInverted(true);
-        rightMotor.setInverted(true);
+        rightMotor.setInverted(false);
+
+        leftMotor.follow(rightMotor, true);
 
         aimPID.setTolerance(AimConstants.AIM_TOLERANCE);
     }
@@ -51,22 +55,24 @@ public class AimSubsystem extends SubsystemBase {
         double pidValue = aimPID.calculate(aimEncoder.getPosition(), angle);
         double ffValue = aimFF.calculate(angle, 0);
 
-        leftMotor.setVoltage(pidValue + ffValue);
         rightMotor.setVoltage(pidValue + ffValue);
     }
 
+    /**
+     * Check if the shooter is at the target angle
+     * @return If the shooter is at the target angle
+     */
     public boolean atTargetAngle() {
         return this.aimPID.atSetpoint();
     }
+
     /**
      * Reset the shooter to the default angle
      */
-
     public void reset() {
         double pidValue = aimPID.calculate(aimEncoder.getPosition(), AimConstants.DEFAULT_ANGLE);
         double ffValue = aimFF.calculate(AimConstants.DEFAULT_ANGLE, 0);
 
-        leftMotor.setVoltage(pidValue + ffValue);
         rightMotor.setVoltage(pidValue + ffValue);
     }
 

@@ -12,7 +12,7 @@ public class SpinUpCommand extends Command {
 
     /**
      * Command to spin up the shooter
-     * @param target Either the speaker or amp {@link Target}
+     * @param target Amp, Amp-Shoot, Speaker, High Pass, or Low Pass from {@link Target}
      * @param shooterSubsystem Instance of {@link ShooterSubsystem}
      */
     public SpinUpCommand(Target target, ShooterSubsystem shooterSubsystem) {
@@ -22,16 +22,16 @@ public class SpinUpCommand extends Command {
 
     @Override
     public void initialize() {
-        super.initialize();
+        shooterSubsystem.resetPID();
     }
 
     @Override
     public void execute() {
         switch (this.target) {
             case AMP, AMP_SHOOT ->
-                shooterSubsystem.setShooterSpeed(1000, 1000);
+                shooterSubsystem.setShooterSpeed(ShooterConstants.AMP_RPM, ShooterConstants.AMP_RPM);
             case SPEAKER, LOW_PASS ->
-                shooterSubsystem.setShooterSpeed(6500, 6500);
+                shooterSubsystem.setShooterSpeed(ShooterConstants.SPEAKER_RPM, ShooterConstants.SPEAKER_RPM);
             case HIGH_PASS ->
                 shooterSubsystem.setShooterSpeed(ShooterConstants.PASS_RPM, ShooterConstants.PASS_RPM);
         }

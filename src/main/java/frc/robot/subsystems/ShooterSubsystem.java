@@ -11,16 +11,18 @@ import frc.robot.utils.CANUtils;
 import frc.robot.utils.MathUtils;
 
 public class ShooterSubsystem extends SubsystemBase {
+    // Motors
     private final CANSparkMax topMotor = CANUtils.configure(new CANSparkMax(ShooterConstants.TOP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
-
     private final CANSparkMax bottomMotor = CANUtils.configure(new CANSparkMax(ShooterConstants.BOTTOM_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
 
+    // PID Controller
     private final PIDController shooterPID = new PIDController(
             ShooterConstants.SHOOTER_P,
             ShooterConstants.SHOOTER_I,
             ShooterConstants.SHOOTER_D
     );
 
+    // Feedforward controller
     private final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(
             ShooterConstants.SHOOTER_KS,
             ShooterConstants.SHOOTER_KV,
@@ -28,39 +30,36 @@ public class ShooterSubsystem extends SubsystemBase {
     );
 
     /**
-     * The subsystem for controlling all shooter things
+     * The subsystem for controlling shooter wheels
      */
     public ShooterSubsystem() {
         topMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
         bottomMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
+
+        topMotor.setInverted(false);
+
+        bottomMotor.follow(topMotor, true);
     }
 
     /**
-     * Set the target speed of the top motor
-     * @param speed The target RPM for the motor
+     * Set the target speed of the shooter
+     * @param speed The target RPM for the shooter
      */
-    public void setTopSpeed(double speed) {
-        topMotor.setVoltage(shooterPID.calculate(MathUtils.rpmToRadians(topMotor.getEncoder().getVelocity()), MathUtils.rpmToRadians(speed)) +
-                shooterFF.calculate(MathUtils.rpmToRadians(speed)));
+    public void setShooterSpeed(double speed) {
+        speed /= ShooterConstants.MOTOR_TO_WHEEL_RATIO;
+        topMotor.setVoltage(
+                shooterPID.calculate(
+                    MathUtils.rpmToRadians(topMotor.getEncoder().getVelocity()),
+                    MathUtils.rpmToRadians(speed)) + shooterFF.calculate(MathUtils.rpmToRadians(speed)
+                )
+        );
     }
 
     /**
-     * Set the target speed of the bottom motor
-     * @param speed The target RPM for the motor
+     * Reset the shooter PID controller
      */
-    public void setBottomMotor(double speed) {
-        bottomMotor.setVoltage(shooterPID.calculate(MathUtils.rpmToRadians(bottomMotor.getEncoder().getVelocity()), MathUtils.rpmToRadians(speed)) +
-                shooterFF.calculate(MathUtils.rpmToRadians(speed)));
-    }
-
-    /**
-     * Set the speed of the top and bottom motors
-     * @param top The target RPM for the top motor
-     * @param bottom The target RPM for the bottom motor
-     */
-    public void setShooterSpeed(double top, double bottom) {
-        this.setTopSpeed(top);
-        this.setBottomMotor(bottom);
+    public void resetPID() {
+        shooterPID.reset();
     }
 
 

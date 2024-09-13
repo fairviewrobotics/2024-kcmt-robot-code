@@ -5,13 +5,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -25,10 +24,15 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.VisionConstants;
 import frc.robot.controllers.SwerveModuleControlller;
 import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.SwerveUtils;
 import frc.robot.utils.VisionUtils;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonVersion;
 
 import java.util.Optional;
 
@@ -88,6 +92,12 @@ public class SwerveSubsystem extends SubsystemBase {
      */
 
     private double distanceToTag = 1.0;
+
+    private PhotonCamera cam = VisionUtils.getPhotonAprilCamera();
+
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    Transform3d robotToCam = VisionUtils.getPhotonAprilRobotToCamera();
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cam, robotToCam);
 
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
             DrivetrainConstants.driveKinematics,
@@ -168,6 +178,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         NTUtils.setDouble("Gyro Angle", gyro.getAngle());
+
 //        if (!DriverStation.isAutonomous())
 //            gyro.setAngleAdjustment(180);
 //        else
@@ -183,6 +194,8 @@ public class SwerveSubsystem extends SubsystemBase {
                         rearRight.getPosition()
                 }
         );
+
+        Optional<EstimatedRobotPose> estimatedRobotPose = VisionUtils.getEstimatedGlobalPose(photonPoseEstimator, poseEstimator.getEstimatedPosition());
 
         // Add vision measurement to odometry
         Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
@@ -215,12 +228,19 @@ public class SwerveSubsystem extends SubsystemBase {
                         VecBuilder.fill(9999, 9999, 9999)
                 );
             }
+
             poseEstimator.addVisionMeasurement(
-                    new Pose2d(
-                            new Translation2d(visionMeasurement.getX(), visionMeasurement.getY()),
-                            visionMeasurement.getRotation().toRotation2d()
-                    ),
-                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0));
+                    visionMeasurement.toPose2d(),
+                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
+            );
+
+            if (estimatedRobotPose.isPresent()) {
+                poseEstimator.addVisionMeasurement(
+                        estimatedRobotPose.get().estimatedPose.toPose2d(),
+                        estimatedRobotPose.get().timestampSeconds
+                );
+            }
+
         }
 
         frontrightpos.set(frontRight.getPosition().angle.getRadians());

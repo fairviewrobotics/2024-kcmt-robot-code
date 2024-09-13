@@ -1,0 +1,137 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4849618942116438,
+      "y": 6.964190307690961
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoSpinUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoAim"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "InitialShootLeft_5Note"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoIntakeContinuous1.5"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "Front1_5Note"
+                                  }
+                                },
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "Back1_5Note"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "ShootLeft_5Note"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back2_5Note"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "ShootLeft2_5Note"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back3_5Note"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "ShootStage_5Note"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
