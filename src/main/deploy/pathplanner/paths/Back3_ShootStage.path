@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.11,
-        "y": 5.85
+        "x": 8.18,
+        "y": 4.24
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.807944158583629,
-        "y": 6.613170447239331
+        "x": 6.687311989166708,
+        "y": 3.9780596988780186
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Back3"
     },
     {
       "anchor": {
-        "x": 4.84,
-        "y": 6.19
+        "x": 4.3832062251830655,
+        "y": 4.925424003771546
       },
       "prevControl": {
-        "x": 6.537316588812865,
-        "y": 6.565210274717425
+        "x": 5.779523168207576,
+        "y": 4.285450624215413
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "StageShootPosition"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": -10.070284035167044,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 11.62836795663499,
+    "rotation": -8.639999999999986,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "5NotePaths",
+  "folder": "BackToShoot",
   "previewStartingState": null,
   "useDefaultConstraints": true
 }

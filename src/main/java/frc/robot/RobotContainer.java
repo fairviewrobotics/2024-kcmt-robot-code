@@ -22,6 +22,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.constants.Constants.Target;
+import frc.robot.utils.Controller;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,6 +40,8 @@ public class RobotContainer {
   // Controllers
   XboxController primaryController = new XboxController(0);
   XboxController secondaryController = new XboxController(1);
+
+  Controller testController = new Controller(2);
 
   // Auto Chooser
   SendableChooser<Command> superSecretMissileTech = new SendableChooser<>();
@@ -78,7 +81,6 @@ public class RobotContainer {
             new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.NOTE)
     );
 
-
     // PRIMARY CONTROLLER
 
     // Default drive command
@@ -114,9 +116,6 @@ public class RobotContainer {
     new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value).whileTrue(
             new ShootCommand(intakeSubsystem)
     );
-
-
-
 
     // SECONDARY CONTROLLER
 
