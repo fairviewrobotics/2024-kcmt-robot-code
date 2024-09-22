@@ -21,15 +21,15 @@ public class IntakeCommand extends Command {
 
     @Override
     public void execute() {
-        if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
-            intakeSubsystem.setSpeed(0.6);
-        } else {
-            intakeSubsystem.setSpeed(0);
-        }
+//        if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
+            intakeSubsystem.setSpeed(0.3);
+//        } else {
+//            intakeSubsystem.setSpeed(0);
+//        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.setSpeed(0);
+        intakeSubsystem.setSpeed(0.0);
     }
 }

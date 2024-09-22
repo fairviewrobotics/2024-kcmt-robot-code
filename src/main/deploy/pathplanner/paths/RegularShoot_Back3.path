@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.84,
-        "y": 6.19
+        "x": 4.842488744197878,
+        "y": 6.193270681144061
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.343614514815236,
-        "y": 6.582119944599709
+        "x": 7.346103259013114,
+        "y": 6.58539062574377
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RegularShootPosition"
     },
     {
       "anchor": {
-        "x": 8.184727010383556,
-        "y": 4.237005036978589
+        "x": 8.18,
+        "y": 4.24
       },
       "prevControl": {
-        "x": 8.067562611886842,
-        "y": 4.341909722050329
+        "x": 8.062835601503286,
+        "y": 4.34490468507174
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Back3"
     }
   ],
   "rotationTargets": [
@@ -67,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "7NotePaths",
+  "folder": "ShootToBack",
   "previewStartingState": null,
   "useDefaultConstraints": true
 }

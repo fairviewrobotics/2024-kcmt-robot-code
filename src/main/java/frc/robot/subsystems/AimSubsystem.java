@@ -40,8 +40,8 @@ public class AimSubsystem extends SubsystemBase {
     public AimSubsystem() {
         // TODO: reverse the motors if needed
         rightMotor.setInverted(false);
+        leftMotor.setInverted(true);
 
-        leftMotor.follow(rightMotor, true);
 
         aimPID.setTolerance(AimConstants.AIM_TOLERANCE);
     }
@@ -56,6 +56,7 @@ public class AimSubsystem extends SubsystemBase {
         double ffValue = aimFF.calculate(angle, 0);
 
         rightMotor.setVoltage(pidValue + ffValue);
+        leftMotor.setVoltage(pidValue + ffValue);
     }
 
     /**
@@ -74,6 +75,7 @@ public class AimSubsystem extends SubsystemBase {
         double ffValue = aimFF.calculate(AimConstants.DEFAULT_ANGLE, 0);
 
         rightMotor.setVoltage(pidValue + ffValue);
+        leftMotor.setVoltage(pidValue + ffValue);
     }
 
     /**

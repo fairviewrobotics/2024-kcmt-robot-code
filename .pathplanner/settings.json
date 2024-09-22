@@ -3,8 +3,13 @@
   "robotLength": 0.7,
   "holonomicMode": true,
   "pathFolders": [
-    "7NotePaths",
-    "5NotePaths"
+    "BackToShoot",
+    "FrontToBack",
+    "FrontToFront",
+    "ShootToBack",
+    "ShootToFront",
+    "StartToBack",
+    "StartToShoot"
   ],
   "autoFolders": [],
   "defaultMaxVel": 5.0,

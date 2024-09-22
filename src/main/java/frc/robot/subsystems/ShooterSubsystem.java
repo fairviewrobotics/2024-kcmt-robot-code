@@ -37,8 +37,8 @@ public class ShooterSubsystem extends SubsystemBase {
         bottomMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
 
         topMotor.setInverted(false);
+        bottomMotor.setInverted(true);
 
-        bottomMotor.follow(topMotor, true);
     }
 
     /**
@@ -46,13 +46,15 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param speed The target RPM for the shooter
      */
     public void setShooterSpeed(double speed) {
-        speed /= ShooterConstants.MOTOR_TO_WHEEL_RATIO;
-        topMotor.setVoltage(
-                shooterPID.calculate(
-                    MathUtils.rpmToRadians(topMotor.getEncoder().getVelocity()),
-                    MathUtils.rpmToRadians(speed)) + shooterFF.calculate(MathUtils.rpmToRadians(speed)
-                )
-        );
+//        speed /= ShooterConstants.MOTOR_TO_WHEEL_RATIO;
+//        topMotor.setVoltage(
+//                shooterPID.calculate(
+//                    MathUtils.rpmToRadians(topMotor.getEncoder().getVelocity()),
+//                    MathUtils.rpmToRadians(speed)) + shooterFF.calculate(MathUtils.rpmToRadians(speed)
+//                )
+//        );
+        topMotor.set(speed);
+        bottomMotor.set(speed);
     }
 
     /**
@@ -60,6 +62,11 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void resetPID() {
         shooterPID.reset();
+    }
+
+    @Override
+    public void periodic() {
+        System.out.println(bottomMotor.isFollower());
     }
 
 

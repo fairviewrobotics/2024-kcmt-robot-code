@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 public class ShooterConstants {
     public static final double MAX_MOTOR_RPM = 6500; //TODO: tune
 
-    public static final double MOTOR_TO_WHEEL_RATIO = 1; //TODO: tune
+    public static final double MOTOR_TO_WHEEL_RATIO = 60.0/36.0; //TODO: tune
 
     public static final double SPEAKER_RPM = 8000; //TODO: tune
 
@@ -16,9 +16,9 @@ public class ShooterConstants {
 
     public static final double AMP_RPM = 1000; //TODO: tune
 
-    public static final int TOP_MOTOR_ID = 0;
+    public static final int TOP_MOTOR_ID = 10;
 
-    public static final int BOTTOM_MOTOR_ID = 0;
+    public static final int BOTTOM_MOTOR_ID = 9;
 
     public static final double SHOOTER_P = 5;
 

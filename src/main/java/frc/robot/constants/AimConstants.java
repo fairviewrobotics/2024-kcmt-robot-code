@@ -3,9 +3,9 @@ package frc.robot.constants;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class AimConstants {
-    public static final int LEFT_MOTOR_ID = 0;
+    public static final int LEFT_MOTOR_ID = 11;
 
-    public static final int RIGHT_MOTOR_ID = 0;
+    public static final int RIGHT_MOTOR_ID = 12;
 
     public static final double AIM_P = 0.0;
     public static final double AIM_I = 0;
