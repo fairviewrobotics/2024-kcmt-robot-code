@@ -19,12 +19,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.constants.Constants.Target;
 import frc.robot.utils.Controller;
+import org.opencv.core.Mat;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -134,28 +136,40 @@ public class RobotContainer {
 //            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
 //    );
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-      new RunCommand(() -> shooterSubsystem.setShooterSpeed(0.4))
-    ).whileFalse(
-            new RunCommand(() -> shooterSubsystem.setShooterSpeed(0.0))
+      new SpinUpCommand(Target.HIGH_PASS, shooterSubsystem)
     );
+
 
     // Spin up shooter slow: Left trigger
     new JoystickButton(secondaryController, XboxController.Axis.kLeftTrigger.value).whileTrue(
             new SpinUpCommand(Target.HIGH_PASS, shooterSubsystem)
     );
 
+    new JoystickButton(secondaryController, XboxController.Button.kY.value).whileTrue(
+            new RunCommand(() -> aimSubsystem.setAngle(Math.toRadians(45)))
+    ).whileFalse(
+            new RunCommand(() -> {
+              aimSubsystem.runLeft(0.0);
+              aimSubsystem.runRight(0.0);
+            })
+    );
+
+    new JoystickButton(secondaryController, XboxController.Button.kX.value).whileTrue(
+            new RunCommand(() -> aimSubsystem.resetPID())
+    );
+
     // Intake + rotate to note: Right bumper
     new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
 //            new ParallelCommandGroup(
 //                    new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
-                    new IntakeCommand(intakeSubsystem, false)
+                    new IntakeCommand(intakeSubsystem, true)
 //            )
     );
 
     new POVButton(secondaryController, 0).whileTrue(
         new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
     ).whileFalse(
-        new RunCommand(() -> intakeSubsystem.setSpeed(0))
+        new RunCommand(() -> intakeSubsystem.setSpeed(0.0))
     );
 
     // Raise shooter + rotate to amp + spin up for amp: X button

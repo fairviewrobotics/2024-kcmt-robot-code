@@ -9,13 +9,15 @@ public class VisionConstants {
     public static final TrapezoidProfile.Constraints ROTATE_TO_CONSTRAINTS = new TrapezoidProfile.Constraints(Math.PI * 2, Math.PI);
 
 
-    public static final double CAM_HEIGHT = 0.1;
+    public static final double CAM_HEIGHT_M = 0.2794;
 
     public static final double NOTE_WIDTH_M = 0.35;
 
-    public static final int LIMELIGHT_FOV = 54;
+    public static final int NOTE_CAM_FOV = 100;
 
-    public static final int LIMELIGHT_MAX_WIDTH_PXLS = 320;
+    public static final int NOTE_CAM_MAX_WIDTH_PXLS = 1280;
+
+    public static final double NOTE_CAM_OFFSET = Math.toRadians(32);
 
     public static final double MOVEMENT_P = 0.0; //TODO: tune
     public static final double MOVEMENT_I = 0.0; //TODO: tune

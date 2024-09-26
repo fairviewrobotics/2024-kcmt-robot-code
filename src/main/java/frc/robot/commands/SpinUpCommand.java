@@ -41,4 +41,9 @@ public class SpinUpCommand extends Command {
     public void end(boolean interrupted) {
         shooterSubsystem.setShooterSpeed(0);
     }
+
+    @Override
+    public void initialize() {
+        shooterSubsystem.resetPID();
+    }
 }

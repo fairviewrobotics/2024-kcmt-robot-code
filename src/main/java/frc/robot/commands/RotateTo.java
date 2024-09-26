@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,7 +35,7 @@ public class RotateTo extends Command {
             VisionConstants.MOVEMENT_CONSTRAINTS
     );
 
-    private double seeNote;
+    private boolean seeNote;
 
     private Pose2d rotateToPose;
 
@@ -56,16 +55,17 @@ public class RotateTo extends Command {
                 rotatePID.setTolerance(0.2);
                 rotatePID.enableContinuousInput(-Math.PI*2, 0);
 
-                seeNote = VisionUtils.getNoteTV();
+                seeNote = VisionUtils.noteHasTarget();
 
                 double cameraDist = VisionConstants.NOTE_WIDTH_M / Math.tan(Math.toRadians(
-                        VisionConstants.LIMELIGHT_FOV * (VisionUtils.getThor()/VisionConstants.LIMELIGHT_MAX_WIDTH_PXLS)));
+                        VisionConstants.NOTE_CAM_FOV * (VisionUtils.getThor()/VisionConstants.NOTE_CAM_MAX_WIDTH_PXLS)));
 
-                double dist = Math.sqrt(Math.pow(cameraDist, 2) - Math.pow(VisionConstants.CAM_HEIGHT, 2));
+                double dist = Math.sqrt(Math.pow(cameraDist, 2) - Math.pow(VisionConstants.CAM_HEIGHT_M, 2));
 
                 Pose2d robotPose = swerveSubsystem.getPose();
 
-                this.rotateToPose = new Pose2d(robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX())) * dist,  robotPose.getY() + Math.sin(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX())) * dist, new Rotation2d());
+                this.rotateToPose = new Pose2d(robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist,
+                        robotPose.getY() + Math.sin(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist, new Rotation2d());
             }
             case SPEAKER -> {
                 rotatePID.reset(swerveSubsystem.getPose().getRotation().getRadians());
@@ -113,7 +113,7 @@ public class RotateTo extends Command {
                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? -Math.PI / 2 : Math.PI / 2);
         }
 
-        if ((this.target == Target.NOTE && seeNote == 0.0) || Math.abs(controller.getRightX()) > 0.05) {
+        if ((this.target == Target.NOTE && seeNote) || Math.abs(controller.getRightX()) > 0.05) {
             swerveSubsystem.drive(
                     controller.getLeftY() * DrivetrainConstants.drivingSpeedScalar,
                     controller.getLeftX() * DrivetrainConstants.drivingSpeedScalar,

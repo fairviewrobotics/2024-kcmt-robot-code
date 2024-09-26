@@ -2,6 +2,7 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import org.opencv.core.Mat;
 
 import java.util.function.Function;
 
@@ -123,5 +124,9 @@ public class ShooterUtils {
             }
         }
         return (min + max) / 2;
+    }
+
+    public static double encoderToRad(double encoder) {
+        return encoder * ((Math.PI / 2) - ((5 * Math.PI) / 180)) / 23.170 + (Math.PI * 5) / 180;
     }
 }

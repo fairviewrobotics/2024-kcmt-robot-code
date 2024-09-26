@@ -12,7 +12,7 @@ public class ShooterConstants {
 
     public static final double SPEAKER_RPM = 8000; //TODO: tune
 
-    public static final double PASS_RPM = 4500; //TODO: tune
+    public static final double PASS_RPM = 4000; //TODO: tune
 
     public static final double AMP_RPM = 1000; //TODO: tune
 
@@ -20,15 +20,15 @@ public class ShooterConstants {
 
     public static final int BOTTOM_MOTOR_ID = 9;
 
-    public static final double SHOOTER_P = 5;
+    public static final double SHOOTER_P = 0.0;
 
     public static final double SHOOTER_I = 0;
 
     public static final double SHOOTER_D = 0;
 
-    public static final double SHOOTER_KS = 5;
+    public static final double SHOOTER_KS = 0.1;
 
-    public static final double SHOOTER_KV = 0;
+    public static final double SHOOTER_KV = 0.01774;
 
     public static final double SHOOTER_KA = 0;
 
