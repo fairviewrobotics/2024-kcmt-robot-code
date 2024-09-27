@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
@@ -15,8 +16,8 @@ import frc.robot.utils.ShooterUtils;
 
 public class AimSubsystem extends SubsystemBase {
     // Motors
-    private final CANSparkMax leftMotor = CANUtils.configure(new CANSparkMax(AimConstants.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
-    private final CANSparkMax rightMotor = CANUtils.configure(new CANSparkMax(AimConstants.RIGHT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
+    private final CANSparkFlex leftMotor = CANUtils.configure(new CANSparkFlex(AimConstants.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
+    private final CANSparkFlex rightMotor = CANUtils.configure(new CANSparkFlex(AimConstants.RIGHT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
 
     private final NetworkTableUtils NTDebug = new NetworkTableUtils("Debug");
 
