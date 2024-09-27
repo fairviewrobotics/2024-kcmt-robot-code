@@ -1,19 +1,31 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.utils.CANUtils;
 
-import java.util.function.Function;
-
 public class IntakeSubsystem extends SubsystemBase {
     // Motors
-    private final CANSparkMax topMotor = CANUtils.configure(new CANSparkMax(IntakeConstants.TOP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
-    private final CANSparkMax bottomMotor = CANUtils.configure(new CANSparkMax(IntakeConstants.BOTTOM_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
+    private final CANSparkFlex leftMotor = CANUtils.configure(new CANSparkFlex(IntakeConstants.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
+    private final CANSparkFlex rightMotor = CANUtils.configure(new CANSparkFlex(IntakeConstants.RIGHT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
+
+    private final DoubleEntry intakeSpeedTop = NetworkTableInstance.getDefault()
+            .getTable("Intake").getDoubleTopic("Top").getEntry(0.0);
+
+    private final DoubleEntry intakeSpeedBottom = NetworkTableInstance.getDefault()
+            .getTable("Intake").getDoubleTopic("Bottom").getEntry(0.0);
+
+    private final DoubleEntry intakeCycleTop = NetworkTableInstance.getDefault()
+            .getTable("Intake").getDoubleTopic("TopC").getEntry(0.0);
+
+    private final DoubleEntry intakeCycleBottom = NetworkTableInstance.getDefault()
+            .getTable("Intake").getDoubleTopic("BottomC").getEntry(0.0);
 
     // Linebreaks
     private final DigitalInput frontLinebreak = new DigitalInput(IntakeConstants.FRONT_LINEBREAK);
@@ -27,12 +39,12 @@ public class IntakeSubsystem extends SubsystemBase {
      * Subsystem for controlling the intake
      */
     public IntakeSubsystem() {
-        bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-        topMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        rightMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
+        leftMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
 
-        topMotor.setInverted(false);
+        leftMotor.setInverted(false);
+        rightMotor.setInverted(true);
 
-        bottomMotor.follow(topMotor, true);
     }
 
 
@@ -41,7 +53,8 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param speed The target speed in %
      */
     public void setSpeed(double speed) {
-        topMotor.set(speed);
+        leftMotor.set(speed);
+        rightMotor.set(speed);
     }
 
     /**
@@ -69,6 +82,15 @@ public class IntakeSubsystem extends SubsystemBase {
             preFrontState = !preFrontState;
             r.run();
         }
+    }
+
+    @Override
+    public void periodic() {
+        intakeSpeedBottom.set(rightMotor.getEncoder().getVelocity());
+        intakeSpeedTop.set(leftMotor.getEncoder().getVelocity());
+
+        intakeCycleTop.set(leftMotor.getAppliedOutput());
+        intakeCycleBottom.set(rightMotor.getAppliedOutput());
     }
 
 }

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4849618942116438,
-      "y": 6.964190307690961
+      "x": 1.4770687646844045,
+      "y": 6.980081548053722
     },
     "rotation": 0
   },
@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "InitialShootLeft_5Note"
+                        "pathName": "StartF1_InitialShootAmp"
                       }
                     },
                     {
@@ -60,13 +60,13 @@
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "Front1_5Note"
+                                    "pathName": "InitialShootAmp_Front1"
                                   }
                                 },
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "Back1_5Note"
+                                    "pathName": "Front1_Back1"
                                   }
                                 }
                               ]
@@ -78,7 +78,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootLeft_5Note"
+                        "pathName": "Back1_RegularShoot"
                       }
                     },
                     {
@@ -90,13 +90,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Back2_5Note"
+                        "pathName": "RegularShoot_Back2"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootLeft2_5Note"
+                        "pathName": "Back2_RegularShoot"
                       }
                     },
                     {
@@ -108,13 +108,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Back3_5Note"
+                        "pathName": "RegularShoot_Back3"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootStage_5Note"
+                        "pathName": "Back3_ShootStage"
                       }
                     },
                     {

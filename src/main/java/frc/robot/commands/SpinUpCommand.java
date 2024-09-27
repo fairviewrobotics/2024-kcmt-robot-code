@@ -20,20 +20,30 @@ public class SpinUpCommand extends Command {
         this.shooterSubsystem = shooterSubsystem;
     }
 
-    @Override
-    public void initialize() {
-        shooterSubsystem.resetPID();
-    }
+//    @Override
+//    public void initialize() {
+//        shooterSubsystem.resetPID();
+//    }
 
     @Override
     public void execute() {
         switch (this.target) {
             case AMP, AMP_SHOOT ->
-                shooterSubsystem.setShooterSpeed(ShooterConstants.AMP_RPM, ShooterConstants.AMP_RPM);
+                shooterSubsystem.setShooterSpeed(ShooterConstants.AMP_RPM);
             case SPEAKER, LOW_PASS ->
-                shooterSubsystem.setShooterSpeed(ShooterConstants.SPEAKER_RPM, ShooterConstants.SPEAKER_RPM);
+                shooterSubsystem.setShooterSpeed(ShooterConstants.SPEAKER_RPM);
             case HIGH_PASS ->
-                shooterSubsystem.setShooterSpeed(ShooterConstants.PASS_RPM, ShooterConstants.PASS_RPM);
+                shooterSubsystem.setShooterSpeed(ShooterConstants.PASS_RPM);
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        shooterSubsystem.setShooterSpeed(0);
+    }
+
+    @Override
+    public void initialize() {
+        shooterSubsystem.resetPID();
     }
 }

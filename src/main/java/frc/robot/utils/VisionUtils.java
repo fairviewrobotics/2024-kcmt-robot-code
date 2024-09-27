@@ -13,6 +13,8 @@ public class VisionUtils {
 
     //Note Vision Limelight
     public static NetworkTable noteLimelight = NetworkTableInstance.getDefault().getTable("limelight-note");
+
+    private static NetworkTable notePhoton = NetworkTableInstance.getDefault().getTable("photonvision").getSubTable("note");
     public static double height = 0.4;
     public static double forward = 0.4;
 
@@ -112,15 +114,15 @@ public class VisionUtils {
     }
 
     public static double getNoteTX(){
-        return noteLimelight.getEntry("tx").getDouble(0.0);
+        return notePhoton.getEntry("targetYaw").getDouble(0.0);
     }
 
     public static double getNoteTY() {
         return noteLimelight.getEntry("ty").getDouble(0.0);
     }
 
-    public static double getNoteTV(){
-        return noteLimelight.getEntry("tv").getDouble(0.0);
+    public static boolean noteHasTarget(){
+        return notePhoton.getEntry("hasTarget").getBoolean(false);
     }
 
     public static double YDistanceToNote() {
@@ -140,7 +142,7 @@ public class VisionUtils {
 
 
     public static double getThor() {
-        return noteLimelight.getEntry("thor").getDouble(-1);
+        return notePhoton.getEntry("targetPixelsX").getDouble(-1);
     }
 
 

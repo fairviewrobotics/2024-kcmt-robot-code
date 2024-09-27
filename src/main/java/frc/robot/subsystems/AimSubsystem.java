@@ -5,18 +5,20 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.AimConstants;
 import frc.robot.utils.CANUtils;
 import frc.robot.utils.MathUtils;
+import frc.robot.utils.NetworkTableUtils;
+import frc.robot.utils.ShooterUtils;
 
 public class AimSubsystem extends SubsystemBase {
     // Motors
     private final CANSparkMax leftMotor = CANUtils.configure(new CANSparkMax(AimConstants.LEFT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
     private final CANSparkMax rightMotor = CANUtils.configure(new CANSparkMax(AimConstants.RIGHT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless));
 
-    // Absolute encoder TODO: determine if this will be actually used
-    private final SparkAbsoluteEncoder aimEncoder = leftMotor.getAbsoluteEncoder();
+    private final NetworkTableUtils NTDebug = new NetworkTableUtils("Debug");
 
     // PID controller
     private final ProfiledPIDController aimPID = new ProfiledPIDController(
@@ -40,10 +42,18 @@ public class AimSubsystem extends SubsystemBase {
     public AimSubsystem() {
         // TODO: reverse the motors if needed
         rightMotor.setInverted(false);
+        leftMotor.setInverted(true);
 
-        leftMotor.follow(rightMotor, true);
 
         aimPID.setTolerance(AimConstants.AIM_TOLERANCE);
+    }
+
+    public void runLeft(double v) {
+        leftMotor.setVoltage(v);
+    }
+
+    public void runRight(double v) {
+        rightMotor.setVoltage(v);
     }
 
     /**
@@ -52,10 +62,15 @@ public class AimSubsystem extends SubsystemBase {
      */
     public void setAngle(double angle) {
         angle = MathUtils.inRange(angle, AimConstants.ANGLE_MIN, AimConstants.ANGLE_MAX);
-        double pidValue = aimPID.calculate(aimEncoder.getPosition(), angle);
+        double pidValue = aimPID.calculate(ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition()), angle);
         double ffValue = aimFF.calculate(angle, 0);
 
         rightMotor.setVoltage(pidValue + ffValue);
+        leftMotor.setVoltage(pidValue + ffValue);
+
+
+        NTDebug.setDouble("Setpoint AIM", angle);
+        NTDebug.setDouble("PID error", aimPID.getPositionError());
     }
 
     /**
@@ -70,10 +85,17 @@ public class AimSubsystem extends SubsystemBase {
      * Reset the shooter to the default angle
      */
     public void reset() {
-        double pidValue = aimPID.calculate(aimEncoder.getPosition(), AimConstants.DEFAULT_ANGLE);
+        double pidValue = aimPID.calculate(ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition()), AimConstants.DEFAULT_ANGLE);
         double ffValue = aimFF.calculate(AimConstants.DEFAULT_ANGLE, 0);
 
         rightMotor.setVoltage(pidValue + ffValue);
+        leftMotor.setVoltage(pidValue + ffValue);
+    }
+
+    @Override
+    public void periodic() {
+        NTDebug.setDouble("Pos deg", ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition()));
+        ;
     }
 
     /**
@@ -81,6 +103,10 @@ public class AimSubsystem extends SubsystemBase {
      * This should be called everytime a command that uses the PID controller is started
      */
     public void resetPID() {
-        aimPID.reset(aimEncoder.getPosition());
+        aimPID.reset(leftMotor.getEncoder().getPosition());
+    }
+
+    public void resetEncoder() {
+        this.leftMotor.getEncoder().setPosition(0);
     }
 }
