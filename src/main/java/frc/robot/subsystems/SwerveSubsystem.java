@@ -234,12 +234,10 @@ public class SwerveSubsystem extends SubsystemBase {
                     Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
             );
 
-            if (estimatedRobotPose.isPresent()) {
-                poseEstimator.addVisionMeasurement(
-                        estimatedRobotPose.get().estimatedPose.toPose2d(),
-                        estimatedRobotPose.get().timestampSeconds
-                );
-            }
+            estimatedRobotPose.ifPresent(robotPose -> poseEstimator.addVisionMeasurement(
+                    robotPose.estimatedPose.toPose2d(),
+                    robotPose.timestampSeconds
+            ));
 
         }
 
