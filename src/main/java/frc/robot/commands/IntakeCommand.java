@@ -21,11 +21,11 @@ public class IntakeCommand extends Command {
 
     @Override
     public void execute() {
-//        if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
+        if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
             intakeSubsystem.setSpeed(0.4);
-//        } else {
-//            intakeSubsystem.setSpeed(0);
-//        }
+        } else {
+            intakeSubsystem.setSpeed(0);
+        }
     }
 
     @Override

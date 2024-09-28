@@ -198,9 +198,9 @@ public class SwerveSubsystem extends SubsystemBase {
         Optional<EstimatedRobotPose> estimatedRobotPose = VisionUtils.getEstimatedGlobalPose(photonPoseEstimator, poseEstimator.getEstimatedPosition());
 
         // Add vision measurement to odometry
-        Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
+        Optional<Pose3d> visionMeasurement = VisionUtils.getBotPoseFieldSpace();
 
-        if (Math.abs(visionMeasurement.getY()) != 0 && Math.abs(visionMeasurement.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
+        if (visionMeasurement.isPresent() && VisionUtils.getDistanceFromTag() < 3) {
             distanceToTag = VisionUtils.getDistanceFromTag();
 
 
@@ -229,15 +229,25 @@ public class SwerveSubsystem extends SubsystemBase {
                 );
             }
 
-            poseEstimator.addVisionMeasurement(
-                    visionMeasurement.toPose2d(),
+//             poseEstimator.addVisionMeasurement(
+//                    visionMeasurement.toPose2d(),
+//                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
+//            );
+            visionMeasurement.ifPresent(robotPose -> {
+                poseEstimator.addVisionMeasurement(
+                    robotPose.toPose2d(),
                     Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
-            );
+                );
+                System.out.println("Adding limelight " + robotPose.toPose2d());
+            });
 
-            estimatedRobotPose.ifPresent(robotPose -> poseEstimator.addVisionMeasurement(
+            estimatedRobotPose.ifPresent(robotPose -> {
+                System.out.println("Adding photon " + robotPose.estimatedPose.toPose2d());
+                poseEstimator.addVisionMeasurement(
                     robotPose.estimatedPose.toPose2d(),
                     robotPose.timestampSeconds
-            ));
+                );
+            });
 
         }
 
@@ -324,7 +334,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Gets the robots chassis speed relative to the field
-     * @return Returns robot speed as a {@link ChassisSpeeds} in meters/second
+     * @return Returns robo t speed as a {@link ChassisSpeeds} in meters/second
      */
     public ChassisSpeeds getFieldRelativeChassisSpeeds() {
         return new ChassisSpeeds(

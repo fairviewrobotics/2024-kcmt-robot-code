@@ -7,6 +7,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class VisionUtils {
@@ -34,18 +35,18 @@ public class VisionUtils {
      * @param useAlliance Whether to add on the alliance
      * @return The pose from the limelight
      */
-    private static Pose3d getPose(String pose, boolean useAlliance) {
-        if (!enabled) return new Pose3d();
+    private static Optional<Pose3d> getPose(String pose, boolean useAlliance) {
+        if (!enabled) return Optional.empty();
 
 //        String suffix = (useAlliance && DriverStation.getAlliance().isPresent()) ?
 //                ((DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? "_wpiblue" : "_wpired") : "";
 
 
         String suffix = useAlliance ? "_wpiblue" : "";
-        double[] returnedPose = NetworkTableInstance.getDefault().getTable("limelight-april").getEntry(pose + suffix).getDoubleArray(new double[0]);
-        if (returnedPose.length == 0) return new Pose3d();
+        double[] returnedPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry(pose + suffix).getDoubleArray(new double[0]);
+        if (returnedPose.length == 0 || (Objects.equals(getPose3d(returnedPose).toPose2d(), new Pose2d(new Translation2d(0, 0), new Rotation2d(0))))) return Optional.empty();
 
-        return getPose3d(returnedPose);
+        return Optional.of(getPose3d(returnedPose));
     }
 
     /**
@@ -73,7 +74,7 @@ public class VisionUtils {
      * Gets the bots position relative to the field. Used by odometry
      * @return The bots position
      * */
-    public static Pose3d getBotPoseFieldSpace() {
+    public static Optional<Pose3d> getBotPoseFieldSpace() {
         return getPose("botpose", true);
     }
 
@@ -81,7 +82,7 @@ public class VisionUtils {
      * Gets the bots position relative to the target. Used by AlignCommand
      * @return The bots position
      * */
-    public static Pose3d getBotPoseTargetSpace() {
+    public static Optional<Pose3d> getBotPoseTargetSpace() {
         return getPose("botpose_targetspace", false);
     }
 
@@ -91,7 +92,7 @@ public class VisionUtils {
      */
     public static double getDistanceFromTag() {
 
-        Pose3d returnedPose = getBotPoseTargetSpace();
+        Pose3d returnedPose = getBotPoseTargetSpace().get();
 
         return Math.abs(returnedPose.getZ());
 
@@ -102,7 +103,7 @@ public class VisionUtils {
      * @return The latency
      */
     public static double getLatencyPipeline() {
-        return NetworkTableInstance.getDefault().getTable("limelight_april").getEntry("tl").getDouble(0.0);
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0.0);
     }
 
     /**
@@ -110,7 +111,7 @@ public class VisionUtils {
      * @return The latency
      */
     public static double getLatencyCapture() {
-        return NetworkTableInstance.getDefault().getTable("limelight_april").getEntry("cl").getDouble(0.0);
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("cl").getDouble(0.0);
     }
 
     public static double getNoteTX(){

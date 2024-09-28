@@ -18,6 +18,7 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.constants.AimConstants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.AimSubsystem;
@@ -99,11 +100,20 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(
             new DriveCommands(
                     swerveSubsystem,
-                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar,
-                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar,
-                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar,
+                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar/3.0,
+                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar/3.0,
+                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar/3.0,
                     true,
                     true
+            )
+    );
+
+    aimSubsystem.setDefaultCommand(
+            new AimCommand(
+                    aimSubsystem,
+                    swerveSubsystem,
+                    primaryController,
+                    Target.DEFAULT
             )
     );
 
@@ -111,9 +121,9 @@ public class RobotContainer {
     new JoystickButton(primaryController, XboxController.Button.kRightBumper.value).whileTrue(
             new DriveCommands(
                     swerveSubsystem,
-                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar/2.0,
-                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar/2.0,
-                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar/2.0,
+                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar,
+                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar,
+                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar,
                     true,
                     true
             )
@@ -136,7 +146,7 @@ public class RobotContainer {
 //            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
 //    );
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-      new SpinUpCommand(Target.HIGH_PASS, shooterSubsystem)
+      new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
     );
 
 
@@ -146,30 +156,51 @@ public class RobotContainer {
     );
 
     new JoystickButton(secondaryController, XboxController.Button.kY.value).whileTrue(
-            new RunCommand(() -> aimSubsystem.setAngle(Math.toRadians(45)))
-    ).whileFalse(
             new RunCommand(() -> {
-              aimSubsystem.runLeft(0.0);
-              aimSubsystem.runRight(0.0);
-            })
-    );
 
-    new JoystickButton(secondaryController, XboxController.Button.kX.value).whileTrue(
-            new RunCommand(() -> aimSubsystem.resetPID())
+              aimSubsystem.setAngle(Math.toRadians(45));
+            }, aimSubsystem)
     );
+//    ).whileFalse(
+//            new RunCommand(() -> {
+//              aimSubsystem.runLeft(0.0);
+//              aimSubsystem.runRight(0.0);
+//            })
+//    );
+
+//    new JoystickButton(secondaryController, XboxController.Button.kX.value).whileTrue(
+//            new RunCommand(() -> aimSubsystem.resetPID())
+//    );
 
     // Intake + rotate to note: Right bumper
     new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
 //            new ParallelCommandGroup(
 //                    new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
-                    new IntakeCommand(intakeSubsystem, true)
+                    new IntakeCommand(intakeSubsystem, false)
 //            )
     );
+
+//    new JoystickButton(secondaryController, XboxController.Button.kB.value).whileTrue(
+//            new RunCommand(() -> {
+//              shooterSubsystem.setVoltage(9);
+//            })
+//    ).whileFalse(
+//            new RunCommand(() -> {
+//              shooterSubsystem.setVoltage(0);
+//            })
+//    );
 
     new POVButton(secondaryController, 0).whileTrue(
         new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
     ).whileFalse(
         new RunCommand(() -> intakeSubsystem.setSpeed(0.0))
+    );
+
+    new POVButton(secondaryController, 180).whileTrue(
+             new RunCommand(() -> {
+               aimSubsystem.resetEncoder();
+               aimSubsystem.resetPID();
+             })
     );
 
     // Raise shooter + rotate to amp + spin up for amp: X button
@@ -214,5 +245,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return superSecretMissileTech.getSelected();
+  }
+
+  public void enableInit() {
+    aimSubsystem.resetEncoder();
+    aimSubsystem.resetPID();
   }
 }
