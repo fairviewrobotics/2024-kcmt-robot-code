@@ -550,4 +550,15 @@ public class SwerveSubsystem extends SubsystemBase {
         rearLeft.resetEncoders();
         rearRight.resetEncoders();
     }
+
+    /**
+     * Is the robot close enough to our side of the field
+     * @return If we are close enough
+     */
+    public boolean isCloseToUs() {
+        assert DriverStation.getAlliance().isPresent();
+        double xThreshold = DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ? DrivetrainConstants.X_POS_THRESH_RED : DrivetrainConstants.X_POS_THRESH_BLUE; // TODO: I have no idea what this should be
+
+        return DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ? getPose().getX() >= xThreshold : getPose().getX() <= xThreshold; // TODO: Also not sure here
+    }
 }

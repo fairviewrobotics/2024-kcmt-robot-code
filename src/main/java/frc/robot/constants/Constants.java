@@ -22,4 +22,12 @@ public final class Constants {
     DEFAULT,
     NOTE
   }
+
+  public enum Mode {
+    INTAKE,
+    SPEAKER,
+    AMP,
+    PASSING,
+    OFF
+  }
 }

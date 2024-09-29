@@ -32,4 +32,9 @@ public class IntakeCommand extends Command {
     public void end(boolean interrupted) {
         intakeSubsystem.setSpeed(0.0);
     }
+
+    @Override
+    public boolean isFinished() {
+        return this.intakeSubsystem.getFrontLinebreak() && !continuous;
+    }
 }

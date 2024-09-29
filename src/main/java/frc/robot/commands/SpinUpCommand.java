@@ -15,7 +15,7 @@ public class SpinUpCommand extends Command {
      * @param target Amp, Amp-Shoot, Speaker, High Pass, or Low Pass from {@link Target}
      * @param shooterSubsystem Instance of {@link ShooterSubsystem}
      */
-    public SpinUpCommand(Target target, ShooterSubsystem shooterSubsystem) {
+    public SpinUpCommand(ShooterSubsystem shooterSubsystem, Target target) {
         this.target = target;
         this.shooterSubsystem = shooterSubsystem;
     }
