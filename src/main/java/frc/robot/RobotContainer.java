@@ -11,14 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.constants.AimConstants;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -26,7 +23,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.constants.Constants.Target;
 import frc.robot.utils.Controller;
 import frc.robot.utils.NetworkTableUtils;
-import org.opencv.core.Mat;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -244,18 +240,14 @@ public class RobotContainer {
           );
         }
       }
-      case PASSING -> {
-        CSInstance.schedule(
-                new ParallelCommandGroup(
-                        new SpinUpCommand(shooterSubsystem, Target.LOW_PASS /* Dont know if low or high rn*/),
-                        new AimCommand(aimSubsystem, swerveSubsystem, primaryController, Target.LOW_PASS),
-                        new RotateTo(swerveSubsystem, primaryController, Target.LOW_PASS)
-                )
-        );
-      }
-      case OFF -> {
-        System.out.println("Nothing fancy");
-      }
+      case PASSING -> CSInstance.schedule(
+              new ParallelCommandGroup(
+                      new SpinUpCommand(shooterSubsystem, Target.LOW_PASS /* Dont know if low or high rn*/),
+                      new AimCommand(aimSubsystem, swerveSubsystem, primaryController, Target.LOW_PASS),
+                      new RotateTo(swerveSubsystem, primaryController, Target.LOW_PASS)
+              )
+      );
+      case OFF -> System.out.println("Nothing fancy");
     }
   }
 }

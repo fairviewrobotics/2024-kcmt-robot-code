@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.constants.VisionConstants;
 import frc.robot.controllers.SwerveModuleControlller;
 import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.SwerveUtils;
@@ -32,7 +31,6 @@ import frc.robot.utils.VisionUtils;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonVersion;
 
 import java.util.Optional;
 
@@ -93,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private double distanceToTag = 1.0;
 
-    private PhotonCamera cam = VisionUtils.getPhotonAprilCamera();
+    private final PhotonCamera cam = VisionUtils.getPhotonAprilCamera();
 
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     Transform3d robotToCam = VisionUtils.getPhotonAprilRobotToCamera();

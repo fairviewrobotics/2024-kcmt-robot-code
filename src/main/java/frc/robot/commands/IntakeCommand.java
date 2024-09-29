@@ -6,7 +6,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeCommand extends Command {
     private final IntakeSubsystem intakeSubsystem;
 
-    private boolean continuous;
+    private final boolean continuous;
 
     /**
      * Command to intake a note
