@@ -13,6 +13,5 @@ gradle-app.setting
 
 bin
 out
-gradle
 .idea
 build

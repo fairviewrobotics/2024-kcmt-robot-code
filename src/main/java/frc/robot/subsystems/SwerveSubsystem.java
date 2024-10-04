@@ -241,15 +241,11 @@ public class SwerveSubsystem extends SubsystemBase {
                 System.out.println("Adding limelight " + robotPose.toPose2d());
             });
 
-            System.out.println("Getting to the add step");
-            System.out.println(estimatedRobotPose);
-            estimatedRobotPose.ifPresent(robotPose -> {
-                System.out.println("Adding photon " + robotPose.estimatedPose.toPose2d());
-                poseEstimator.addVisionMeasurement(
+            estimatedRobotPose.ifPresent(robotPose -> poseEstimator.addVisionMeasurement(
                     robotPose.estimatedPose.toPose2d(),
                     robotPose.timestampSeconds
-                );
-            });
+            ));
+
 
         }
 
