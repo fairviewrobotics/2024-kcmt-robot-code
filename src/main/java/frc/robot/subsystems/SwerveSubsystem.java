@@ -200,34 +200,34 @@ public class SwerveSubsystem extends SubsystemBase {
         // Add vision measurement to odometry
         Optional<Pose3d> visionMeasurement = VisionUtils.getBotPoseFieldSpace();
 
-        if (visionMeasurement.isPresent() && VisionUtils.getDistanceFromTag() < 3) {
-            distanceToTag = VisionUtils.getDistanceFromTag();
-
-
-            double visionTrust = 0.075 * Math.pow(distanceToTag, 2.5);
-            double rotationVisionTrust = Math.pow(distanceToTag, 2.5) / 5;
-
-            NTUtils.setDouble("Tag_Dist", distanceToTag);
-            NTUtils.setDouble("Vision_Trust", visionTrust);
-            NTUtils.setDouble("Rotation_Vision_Trust", rotationVisionTrust);
-            if (distanceToTag < 3) {
-                poseEstimator.setVisionMeasurementStdDevs(
-                        VecBuilder.fill(
-                                visionTrust,
-                                visionTrust,
-                                rotationVisionTrust
-                        )
-
-                );
-                //System.out.println(visionTrust);
-            } else {
-
-
-                // If we're 3+ meters away, limelight is too unreliable. Don't trust it!
-                poseEstimator.setVisionMeasurementStdDevs(
-                        VecBuilder.fill(9999, 9999, 9999)
-                );
-            }
+        if ((visionMeasurement.isPresent() && VisionUtils.getDistanceFromTag() < 3) || estimatedRobotPose.isPresent()) {
+//            distanceToTag = VisionUtils.getDistanceFromTag();
+//
+//
+//            double visionTrust = 0.075 * Math.pow(distanceToTag, 2.5);
+//            double rotationVisionTrust = Math.pow(distanceToTag, 2.5) / 5;
+//
+//            NTUtils.setDouble("Tag_Dist", distanceToTag);
+//            NTUtils.setDouble("Vision_Trust", visionTrust);
+//            NTUtils.setDouble("Rotation_Vision_Trust", rotationVisionTrust);
+//            if (distanceToTag < 3) {
+//                poseEstimator.setVisionMeasurementStdDevs(
+//                        VecBuilder.fill(
+//                                visionTrust,
+//                                visionTrust,
+//                                rotationVisionTrust
+//                        )
+//
+//                );
+//                //System.out.println(visionTrust);
+//            } else {
+//
+//
+//                // If we're 3+ meters away, limelight is too unreliable. Don't trust it!
+//                poseEstimator.setVisionMeasurementStdDevs(
+//                        VecBuilder.fill(9999, 9999, 9999)
+//                );
+//            }
 
 //             poseEstimator.addVisionMeasurement(
 //                    visionMeasurement.toPose2d(),

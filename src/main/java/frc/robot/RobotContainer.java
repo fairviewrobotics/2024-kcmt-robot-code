@@ -21,10 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.AimConstants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.subsystems.AimSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.constants.Constants.Target;
 import frc.robot.utils.Controller;
 import org.opencv.core.Mat;
@@ -41,6 +38,7 @@ public class RobotContainer {
   ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   AimSubsystem aimSubsystem = new AimSubsystem();
+  LEDSubsystem ledSubsystem = new LEDSubsystem();
 
   // Controllers
   XboxController primaryController = new XboxController(0);
@@ -100,9 +98,9 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(
             new DriveCommands(
                     swerveSubsystem,
-                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar/3.0,
-                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar/3.0,
-                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar/3.0,
+                    () -> primaryController.getLeftY() * DrivetrainConstants.drivingSpeedScalar/1.0,
+                    () -> primaryController.getLeftX() * DrivetrainConstants.drivingSpeedScalar/1.0,
+                    () -> primaryController.getRightX() * DrivetrainConstants.rotationSpeedScalar/1.0,
                     true,
                     true
             )
@@ -136,7 +134,19 @@ public class RobotContainer {
 
     // Shoot(run intake forward): Left bumper
     new JoystickButton(primaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-            new ShootCommand(intakeSubsystem)
+            new ShootCommand(intakeSubsystem, ledSubsystem)
+    );
+
+    new JoystickButton(primaryController, XboxController.Button.kA.value).whileTrue(
+            new RunCommand(() -> {
+              ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.GreenStrobe);
+            })
+    );
+
+    new JoystickButton(primaryController, XboxController.Button.kB.value).whileTrue(
+            new RunCommand(() -> {
+              ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Off);
+            })
     );
 
     // SECONDARY CONTROLLER
@@ -161,6 +171,11 @@ public class RobotContainer {
               aimSubsystem.setAngle(Math.toRadians(45));
             }, aimSubsystem)
     );
+
+    new JoystickButton(secondaryController, XboxController.Button.kA.value).whileTrue(
+            new AimCommand(aimSubsystem, swerveSubsystem, primaryController, Target.AMP)
+    );
+
 //    ).whileFalse(
 //            new RunCommand(() -> {
 //              aimSubsystem.runLeft(0.0);
@@ -176,19 +191,9 @@ public class RobotContainer {
     new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
 //            new ParallelCommandGroup(
 //                    new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
-                    new IntakeCommand(intakeSubsystem, false)
+                    new IntakeCommand(intakeSubsystem, ledSubsystem, false)
 //            )
     );
-
-//    new JoystickButton(secondaryController, XboxController.Button.kB.value).whileTrue(
-//            new RunCommand(() -> {
-//              shooterSubsystem.setVoltage(9);
-//            })
-//    ).whileFalse(
-//            new RunCommand(() -> {
-//              shooterSubsystem.setVoltage(0);
-//            })
-//    );
 
     new POVButton(secondaryController, 0).whileTrue(
         new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
@@ -248,7 +253,11 @@ public class RobotContainer {
   }
 
   public void enableInit() {
-    aimSubsystem.resetEncoder();
     aimSubsystem.resetPID();
+    ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Off);
+  }
+
+  public void disableInit() {
+    ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Rainbow);
   }
 }

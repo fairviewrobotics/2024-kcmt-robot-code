@@ -21,11 +21,11 @@ public class AimConstants {
 
     public static final double MAX_ENCODER = 23.170; // 90 def
 
-    public static final double DEFAULT_ANGLE = Math.toRadians(8);
+    public static final double DEFAULT_ANGLE = Math.toRadians(13);
 
     public static final double ANGLE_MAX = Math.PI/2;
 
-    public static final double ANGLE_MIN = Math.toRadians(5);
+    public static final double ANGLE_MIN = Math.toRadians(8);
 
     public static final double AIM_TOLERANCE = Math.toRadians(1);
     
