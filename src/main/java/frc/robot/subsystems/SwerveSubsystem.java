@@ -198,48 +198,58 @@ public class SwerveSubsystem extends SubsystemBase {
         Optional<EstimatedRobotPose> estimatedRobotPose = VisionUtils.getEstimatedGlobalPose(photonPoseEstimator, poseEstimator.getEstimatedPosition());
 
         // Add vision measurement to odometry
-        Pose3d visionMeasurement = VisionUtils.getBotPoseFieldSpace();
+        Optional<Pose3d> visionMeasurement = VisionUtils.getBotPoseFieldSpace();
 
-        if (Math.abs(visionMeasurement.getY()) != 0 && Math.abs(visionMeasurement.getX()) != 0.0 && VisionUtils.getDistanceFromTag() < 3) {
-            distanceToTag = VisionUtils.getDistanceFromTag();
+        if ((visionMeasurement.isPresent() && VisionUtils.getDistanceFromTag() < 3) || estimatedRobotPose.isPresent()) {
+//            distanceToTag = VisionUtils.getDistanceFromTag();
+//
+//
+//            double visionTrust = 0.075 * Math.pow(distanceToTag, 2.5);
+//            double rotationVisionTrust = Math.pow(distanceToTag, 2.5) / 5;
+//
+//            NTUtils.setDouble("Tag_Dist", distanceToTag);
+//            NTUtils.setDouble("Vision_Trust", visionTrust);
+//            NTUtils.setDouble("Rotation_Vision_Trust", rotationVisionTrust);
+//            if (distanceToTag < 3) {
+//                poseEstimator.setVisionMeasurementStdDevs(
+//                        VecBuilder.fill(
+//                                visionTrust,
+//                                visionTrust,
+//                                rotationVisionTrust
+//                        )
+//
+//                );
+//                //System.out.println(visionTrust);
+//            } else {
+//
+//
+//                // If we're 3+ meters away, limelight is too unreliable. Don't trust it!
+//                poseEstimator.setVisionMeasurementStdDevs(
+//                        VecBuilder.fill(9999, 9999, 9999)
+//                );
+//            }
 
-
-            double visionTrust = 0.075 * Math.pow(distanceToTag, 2.5);
-            double rotationVisionTrust = Math.pow(distanceToTag, 2.5) / 5;
-
-            NTUtils.setDouble("Tag_Dist", distanceToTag);
-            NTUtils.setDouble("Vision_Trust", visionTrust);
-            NTUtils.setDouble("Rotation_Vision_Trust", rotationVisionTrust);
-            if (distanceToTag < 3) {
-                poseEstimator.setVisionMeasurementStdDevs(
-                        VecBuilder.fill(
-                                visionTrust,
-                                visionTrust,
-                                rotationVisionTrust
-                        )
-
-                );
-                //System.out.println(visionTrust);
-            } else {
-
-
-                // If we're 3+ meters away, limelight is too unreliable. Don't trust it!
-                poseEstimator.setVisionMeasurementStdDevs(
-                        VecBuilder.fill(9999, 9999, 9999)
-                );
-            }
-
-            poseEstimator.addVisionMeasurement(
-                    visionMeasurement.toPose2d(),
-                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
-            );
-
-            if (estimatedRobotPose.isPresent()) {
+//             poseEstimator.addVisionMeasurement(
+//                    visionMeasurement.toPose2d(),
+//                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
+//            );
+            visionMeasurement.ifPresent(robotPose -> {
                 poseEstimator.addVisionMeasurement(
-                        estimatedRobotPose.get().estimatedPose.toPose2d(),
-                        estimatedRobotPose.get().timestampSeconds
+                    robotPose.toPose2d(),
+                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
                 );
-            }
+                System.out.println("Adding limelight " + robotPose.toPose2d());
+            });
+
+            System.out.println("Getting to the add step");
+            System.out.println(estimatedRobotPose);
+            estimatedRobotPose.ifPresent(robotPose -> {
+                System.out.println("Adding photon " + robotPose.estimatedPose.toPose2d());
+                poseEstimator.addVisionMeasurement(
+                    robotPose.estimatedPose.toPose2d(),
+                    robotPose.timestampSeconds
+                );
+            });
 
         }
 
@@ -326,7 +336,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Gets the robots chassis speed relative to the field
-     * @return Returns robot speed as a {@link ChassisSpeeds} in meters/second
+     * @return Returns robo t speed as a {@link ChassisSpeeds} in meters/second
      */
     public ChassisSpeeds getFieldRelativeChassisSpeeds() {
         return new ChassisSpeeds(

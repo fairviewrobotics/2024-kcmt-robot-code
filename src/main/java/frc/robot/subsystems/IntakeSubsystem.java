@@ -84,6 +84,10 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    public double getTopMotorRotations(){
+        return leftMotor.getEncoder().getPosition();
+    }
+
     @Override
     public void periodic() {
         intakeSpeedBottom.set(rightMotor.getEncoder().getVelocity());
