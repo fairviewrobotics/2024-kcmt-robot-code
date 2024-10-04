@@ -104,10 +104,19 @@ public class AimSubsystem extends SubsystemBase {
      * This should be called everytime a command that uses the PID controller is started
      */
     public void resetPID() {
-        aimPID.reset(leftMotor.getEncoder().getPosition());
+        System.out.println("Resetting PID");
+        aimPID.reset(ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition()));
+//        aimPID.setGoal(ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition()));
     }
 
+
     public void resetEncoder() {
+        System.out.println("Resetting encoder");
         this.leftMotor.getEncoder().setPosition(0);
     }
+
+    public double getShooterPos() {
+        return ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition());
+    }
+
 }

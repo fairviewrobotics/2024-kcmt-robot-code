@@ -59,10 +59,15 @@ public class AimCommand extends Command {
 
     @Override
     public void execute() {
-        aimSubsystem.setAngle(this.calculateAngle(
-                swerveSubsystem.getPose(),
-                target
-        ));
+        if (target.equals(Target.DEFAULT) && aimSubsystem.getShooterPos() < (AimConstants.DEFAULT_ANGLE + Math.toRadians(1))) {
+            aimSubsystem.runRight(0.0);
+            aimSubsystem.runLeft(0.0);
+        } else {
+            aimSubsystem.setAngle(this.calculateAngle(
+                    swerveSubsystem.getPose(),
+                    target
+            ));
+        }
     }
 
     @Override

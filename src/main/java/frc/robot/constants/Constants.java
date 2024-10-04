@@ -19,6 +19,7 @@ public final class Constants {
     AMP_SHOOT,
     LOW_PASS,
     HIGH_PASS,
+    DEFAULT,
     NOTE
   }
 }

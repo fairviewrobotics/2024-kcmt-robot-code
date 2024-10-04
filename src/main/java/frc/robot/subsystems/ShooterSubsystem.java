@@ -62,7 +62,11 @@ public class ShooterSubsystem extends SubsystemBase {
         );
 
         NTDebug.setDouble("Target", speed);
-        NTDebug.setDouble("ShooterFF", shooterFF.calculate(MathUtils.rpmToRadians(speed)));
+        NTDebug.setDouble("Shooter PID + FF", shooterPID.calculate(MathUtils.rpmToRadians(bottomMotor.getEncoder().getVelocity()), MathUtils.rpmToRadians(speed)) +
+                shooterFF.calculate(MathUtils.rpmToRadians(speed)));
+
+        NTDebug.setDouble("Shooter Motor RPM Current", topMotor.getEncoder().getVelocity());
+        NTDebug.setDouble("Shooter Wheels RPM", topMotor.getEncoder().getVelocity() * 1.6);
 
     }
 
