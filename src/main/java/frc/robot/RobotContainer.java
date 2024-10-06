@@ -6,12 +6,10 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.networktables.NetworkTableListener;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -21,13 +19,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.AimConstants;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.*;
 import frc.robot.constants.Constants.Target;
-import frc.robot.utils.ConfigUtils;
+import frc.robot.utils.ConfigManager;
 import frc.robot.utils.Controller;
 import frc.robot.utils.NetworkTableUtils;
-import org.opencv.core.Mat;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -276,7 +272,7 @@ public class RobotContainer {
   }
 
   public void robotInit() {
-    NTTune.setDouble("Intake Speed", 0);
+    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().getDouble("intake_notein_speed", 0));
   }
 
   public void enableInit() {
@@ -288,7 +284,7 @@ public class RobotContainer {
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Rainbow);
 
     // TODO: Instead of doing this here we should be able to use a NetworkTableListener
-    ConfigUtils.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
-    ConfigUtils.getInstance().saveConfig();
+    ConfigManager.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
+    ConfigManager.getInstance().saveConfig();
   }
 }
