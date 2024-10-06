@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -24,6 +25,9 @@ import frc.robot.constants.Constants.Target;
 import frc.robot.utils.ConfigManager;
 import frc.robot.utils.Controller;
 import frc.robot.utils.NetworkTableUtils;
+import org.opencv.core.Mat;
+
+import javax.xml.crypto.dsig.XMLObject;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -109,19 +113,13 @@ public class RobotContainer {
 
 
 
-//    aimSubsystem.setDefaultCommand(
-//            new AimCommand(
-//                    aimSubsystem,
-//                    swerveSubsystem,
-//                    primaryController,
-//                    Target.DEFAULT
-//            )
-//    );
-
-    new JoystickButton(secondaryController, XboxController.Button.kA.value).whileTrue(
-            new RunCommand(() -> aimSubsystem.setAngle(Math.toRadians(30)))
-    ).whileFalse(
-            new RunCommand(() -> aimSubsystem.setAngle(Math.toRadians(AimConstants.DEFAULT_ANGLE)))
+    aimSubsystem.setDefaultCommand(
+            new AimCommand(
+                    aimSubsystem,
+                    swerveSubsystem,
+                    primaryController,
+                    Target.DEFAULT
+            )
     );
 
     // Slow drive command: Right bumper
@@ -165,7 +163,7 @@ public class RobotContainer {
 //            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
 //    );
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-      new SpinUpCommand(shooterSubsystem, Target.SPEAKER)
+            new SpinUpCommand(shooterSubsystem, Target.SPEAKER)
     );
 
 
@@ -206,7 +204,7 @@ public class RobotContainer {
     new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
 //            new ParallelCommandGroup(
 //                    new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
-                    new IntakeCommand(intakeSubsystem, ledSubsystem, false)
+            new IntakeCommand(intakeSubsystem, ledSubsystem, false)
 //            )
     );
 
@@ -215,16 +213,20 @@ public class RobotContainer {
     );
 
     new POVButton(secondaryController, 0).whileTrue(
-        new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
+            new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
     ).whileFalse(
-        new RunCommand(() -> intakeSubsystem.setSpeed(0.0))
+            new RunCommand(() -> intakeSubsystem.setSpeed(0.0))
     );
 
     new POVButton(secondaryController, 180).whileTrue(
-             new RunCommand(() -> {
-               aimSubsystem.resetEncoder();
-               aimSubsystem.resetPID();
-             })
+            new RunCommand(() -> {
+              aimSubsystem.resetEncoder();
+              aimSubsystem.resetPID();
+            })
+    );
+
+    new POVButton(secondaryController, 90).whileTrue(
+            new RunCommand(() -> ConfigManager.getInstance().saveDefault())
     );
 
     // Raise shooter + rotate to amp + spin up for amp: X button
@@ -254,12 +256,21 @@ public class RobotContainer {
 //    );
 
     // Rotate to speaker + aim at speaker: A button
-//    new JoystickButton(secondaryController, XboxController.Button.kA.value).whileTrue(
+    new JoystickButton(secondaryController, XboxController.Button.kA.value).whileTrue(
 //            new ParallelCommandGroup(
 //                    new RotateTo(swerveSubsystem, primaryController, Target.SPEAKER),
 //                    new AimCommand(aimSubsystem, swerveSubsystem, secondaryController, Target.SPEAKER)
 //            )
-//    );
+            new RunCommand(() -> aimSubsystem.setAngle(Math.toRadians(30)), aimSubsystem)
+    );
+
+    new JoystickButton(secondaryController, XboxController.Button.kRightStick.value).whileTrue(
+            new ParallelCommandGroup(
+                    new AimCommand(aimSubsystem, swerveSubsystem, primaryController, Target.AMP),
+                    new SpinUpCommand(shooterSubsystem, Target.AMP)
+            )
+    );
+
   }
 
   /**
@@ -272,10 +283,10 @@ public class RobotContainer {
   }
 
   public void robotInit() {
-    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().getDouble("intake_notein_speed", 0));
   }
 
   public void enableInit() {
+    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().getDouble("intake_notein_speed", 0));
     aimSubsystem.resetPID();
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Off);
   }
