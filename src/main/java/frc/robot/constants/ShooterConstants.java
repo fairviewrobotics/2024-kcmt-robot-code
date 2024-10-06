@@ -10,7 +10,7 @@ public class ShooterConstants {
 
     public static final double MOTOR_TO_WHEEL_RATIO = 60.0/36.0; //TODO: tune
 
-    public static final double SPEAKER_RPM = 6500; //TODO: tune
+    public static final double SPEAKER_RPM = 7500; //TODO: tune
 
     public static final double PASS_RPM = 4000; //TODO: tune
 

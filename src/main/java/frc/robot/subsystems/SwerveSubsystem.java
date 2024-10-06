@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.constants.VisionConstants;
 import frc.robot.controllers.SwerveModuleControlller;
 import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.SwerveUtils;
@@ -32,7 +31,6 @@ import frc.robot.utils.VisionUtils;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonVersion;
 
 import java.util.Optional;
 
@@ -93,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private double distanceToTag = 1.0;
 
-    private PhotonCamera cam = VisionUtils.getPhotonAprilCamera();
+    private final PhotonCamera cam = VisionUtils.getPhotonAprilCamera();
 
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     Transform3d robotToCam = VisionUtils.getPhotonAprilRobotToCamera();
@@ -241,11 +239,13 @@ public class SwerveSubsystem extends SubsystemBase {
                 System.out.println("Adding limelight " + robotPose.toPose2d());
             });
 
-            estimatedRobotPose.ifPresent(robotPose -> poseEstimator.addVisionMeasurement(
+            estimatedRobotPose.ifPresent(robotPose -> {
+                System.out.println("Adding photon " + robotPose.estimatedPose.toPose2d());
+                poseEstimator.addVisionMeasurement(
                     robotPose.estimatedPose.toPose2d(),
                     robotPose.timestampSeconds
-            ));
-
+                );
+            });
 
         }
 
@@ -547,5 +547,16 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.resetEncoders();
         rearLeft.resetEncoders();
         rearRight.resetEncoders();
+    }
+
+    /**
+     * Is the robot close enough to our side of the field
+     * @return If we are close enough
+     */
+    public boolean isCloseToUs() {
+        assert DriverStation.getAlliance().isPresent();
+        double xThreshold = DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ? DrivetrainConstants.X_POS_THRESH_RED : DrivetrainConstants.X_POS_THRESH_BLUE; // TODO: I have no idea what this should be
+
+        return DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ? getPose().getX() >= xThreshold : getPose().getX() <= xThreshold; // TODO: Also not sure here
     }
 }
