@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants.Target;
 import frc.robot.constants.ShooterConstants;

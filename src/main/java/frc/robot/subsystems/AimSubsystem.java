@@ -114,4 +114,9 @@ public class AimSubsystem extends SubsystemBase {
         System.out.println("Resetting encoder");
         this.leftMotor.getEncoder().setPosition(0);
     }
+
+    public double getShooterPos() {
+        return ShooterUtils.encoderToRad(leftMotor.getEncoder().getPosition());
+    }
+
 }

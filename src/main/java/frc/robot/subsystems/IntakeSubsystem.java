@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.utils.CANUtils;
+import frc.robot.utils.NetworkTableUtils;
 
 public class IntakeSubsystem extends SubsystemBase {
     // Motors
@@ -26,6 +27,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final DoubleEntry intakeCycleBottom = NetworkTableInstance.getDefault()
             .getTable("Intake").getDoubleTopic("BottomC").getEntry(0.0);
+
+    private final NetworkTableUtils NTTune = new NetworkTableUtils("Tune");
 
     // Linebreaks
     private final DigitalInput frontLinebreak = new DigitalInput(IntakeConstants.FRONT_LINEBREAK);
@@ -57,6 +60,12 @@ public class IntakeSubsystem extends SubsystemBase {
         rightMotor.set(speed);
     }
 
+    public void setNTSpeed() {
+        System.out.println(NTTune.getDouble("Intake Speed", 0));
+        leftMotor.set(NTTune.getDouble("Intake Speed", 0));
+        rightMotor.set(NTTune.getDouble("Intake Speed", 0));
+    }
+
     /**
      * Check if the front linebreak is activated
      * @return If the front linebreak is activated
@@ -82,6 +91,10 @@ public class IntakeSubsystem extends SubsystemBase {
             preFrontState = !preFrontState;
             r.run();
         }
+    }
+
+    public double getTopMotorRotations(){
+        return leftMotor.getEncoder().getPosition();
     }
 
     @Override
