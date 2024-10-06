@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.networktables.NetworkTableListener;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +24,7 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.*;
 import frc.robot.constants.Constants.Target;
+import frc.robot.utils.ConfigUtils;
 import frc.robot.utils.Controller;
 import frc.robot.utils.NetworkTableUtils;
 import org.opencv.core.Mat;
@@ -167,13 +169,13 @@ public class RobotContainer {
 //            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
 //    );
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-      new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
+      new SpinUpCommand(shooterSubsystem, Target.SPEAKER)
     );
 
 
     // Spin up shooter slow: Left trigger
     new JoystickButton(secondaryController, XboxController.Axis.kLeftTrigger.value).whileTrue(
-            new SpinUpCommand(Target.HIGH_PASS, shooterSubsystem)
+            new SpinUpCommand(shooterSubsystem, Target.HIGH_PASS)
     );
 
 //    new JoystickButton(secondaryController, XboxController.Button.kY.value).whileTrue(
@@ -284,5 +286,9 @@ public class RobotContainer {
 
   public void disableInit() {
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Rainbow);
+
+    // TODO: Instead of doing this here we should be able to use a NetworkTableListener
+    ConfigUtils.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
+    ConfigUtils.getInstance().saveConfig();
   }
 }
