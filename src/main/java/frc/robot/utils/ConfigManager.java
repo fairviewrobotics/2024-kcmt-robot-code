@@ -1,6 +1,5 @@
 package frc.robot.utils;
 
-import edu.wpi.first.networktables.NetworkTableListenerPoller;
 import edu.wpi.first.wpilibj.Filesystem;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,8 +10,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ConfigUtils {
-    private static ConfigUtils INSTANCE;
+public class ConfigManager {
+    private static ConfigManager INSTANCE;
 
     private final File configFile = Path.of(Filesystem.getDeployDirectory().toPath().toString(), "tuning.json").toFile();
 
@@ -24,9 +23,9 @@ public class ConfigUtils {
      * Get the instance of the config utils
      * @return Instance of config utils
      */
-    public static ConfigUtils getInstance() {
+    public static ConfigManager getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ConfigUtils();
+            INSTANCE = new ConfigManager();
         }
 
         return INSTANCE;
@@ -36,7 +35,7 @@ public class ConfigUtils {
      * Util class to allow for good network table tuning
      * TODO: Integrate better with network tables with (Maybe with {@link edu.wpi.first.networktables.NetworkTableListener})
      */
-    public ConfigUtils() {
+    public ConfigManager() {
         try {
             if (configFile.createNewFile()) {
                 System.out.println("[INFO] Created tuning file");
