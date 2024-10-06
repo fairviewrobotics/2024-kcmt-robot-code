@@ -156,9 +156,8 @@ public class RobotContainer {
 //            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
 //    );
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-      new SpinUpCommand(Target.AMP, shooterSubsystem)
+      new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
     );
-
 
     // Spin up shooter slow: Left trigger
     new JoystickButton(secondaryController, XboxController.Axis.kLeftTrigger.value).whileTrue(

@@ -6,6 +6,7 @@
     "BackToShoot",
     "FrontToBack",
     "FrontToFront",
+    "FrontToShoot",
     "ShootToBack",
     "ShootToFront",
     "StartToBack",
