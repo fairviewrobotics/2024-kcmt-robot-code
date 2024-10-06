@@ -36,19 +36,19 @@ public class IntakeCommand extends Command {
     @Override
     public void execute() {
         if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
-            intakeSubsystem.setSpeed(0.4);
+            intakeSubsystem.setSpeed(0.3);
         } else {
             intakeSubsystem.setSpeed(0);
         }
         if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
-            intakeSubsystem.setSpeed(0.5);
+            intakeSubsystem.setSpeed(0.3);
             startRotations = intakeSubsystem.getTopMotorRotations();
         } else {
             if (intakeSubsystem.getTopMotorRotations() - startRotations > rotationsUntilStop) {
                 intakeSubsystem.setSpeed(0);
                 this.done = true;
             } else {
-                intakeSubsystem.setSpeed(0.5);
+                intakeSubsystem.setSpeed(0.3);
 //                if (ledState.equals("off")) {
                     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.GreenStrobe);
 //                    ledState = "strobe";

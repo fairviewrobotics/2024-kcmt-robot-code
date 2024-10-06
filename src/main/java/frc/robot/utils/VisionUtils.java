@@ -3,6 +3,7 @@ package frc.robot.utils;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.constants.VisionConstants;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -160,11 +161,7 @@ public class VisionUtils {
     }
 
     public static Transform3d getPhotonAprilRobotToCamera() {
-        return new Transform3d(
-            // Forward, Left, Up
-            new Translation3d(0.0, 0.0, 0.0),
-            new Rotation3d(Math.PI, 0.0, 0.0)
-        );
+        return VisionConstants.APRILTAG_PHOTON_CAM_TRANSFORM;
     }
 
     /**

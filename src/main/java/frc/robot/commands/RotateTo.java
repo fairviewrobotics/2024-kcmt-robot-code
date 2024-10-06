@@ -11,11 +11,14 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.SwerveUtils;
 import frc.robot.utils.VisionUtils;
 
 public class RotateTo extends Command {
     private final SwerveSubsystem swerveSubsystem;
+
+    private NetworkTableUtils NTDebug = new NetworkTableUtils("Debug");
 
     private final XboxController controller;
 
@@ -56,16 +59,26 @@ public class RotateTo extends Command {
                 rotatePID.enableContinuousInput(-Math.PI*2, 0);
 
                 seeNote = VisionUtils.noteHasTarget();
+                NTDebug.setString("See note", String.valueOf(seeNote));
 
                 double cameraDist = VisionConstants.NOTE_WIDTH_M / Math.tan(Math.toRadians(
                         VisionConstants.NOTE_CAM_FOV * (VisionUtils.getThor()/VisionConstants.NOTE_CAM_MAX_WIDTH_PXLS)));
 
-                double dist = Math.sqrt(Math.pow(cameraDist, 2) - Math.pow(VisionConstants.CAM_HEIGHT_M, 2));
+                NTDebug.setDouble("Cam dist", cameraDist);
+
+                double dist = Math.sqrt(Math.abs(Math.pow(cameraDist, 2) - Math.pow(VisionConstants.CAM_HEIGHT_M, 2)));
 
                 Pose2d robotPose = swerveSubsystem.getPose();
 
-                this.rotateToPose = new Pose2d(robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist,
+                Pose2d notePose = new Pose2d(robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist,
                         robotPose.getY() + Math.sin(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist, new Rotation2d());
+
+                NTDebug.setDoubleArray("Note Pose", new double[]{
+                        notePose.getX(),
+                        notePose.getY()
+                });
+
+                this.rotateToPose = notePose;
             }
             case SPEAKER -> {
                 rotatePID.reset(swerveSubsystem.getPose().getRotation().getRadians());
