@@ -87,4 +87,7 @@ public class DrivetrainConstants {
 
     public static final int drivingMotorCurrentLimit = 40;
     public static final int turningMotorCurrentLimit = 20;
+
+    public static final double X_POS_THRESH_RED = 10;
+    public static final double X_POS_THRESH_BLUE = -10;
 }

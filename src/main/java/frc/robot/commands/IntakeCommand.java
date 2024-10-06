@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.utils.ConfigManager;
 
 public class IntakeCommand extends Command {
     private final IntakeSubsystem intakeSubsystem;
@@ -34,16 +35,22 @@ public class IntakeCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public void execute() { // TODO: WTH is all this
+        ConfigManager configManager = ConfigManager.getInstance();
         if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
-            intakeSubsystem.setSpeed(0.5);
+            intakeSubsystem.setSpeed(configManager.getDouble("intake_notein_speed", 0.3));
+        } else {
+            intakeSubsystem.setSpeed(0);
+        }
+        if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
+            intakeSubsystem.setSpeed(configManager.getDouble("intake_notein_speed", 0.3));
             startRotations = intakeSubsystem.getTopMotorRotations();
         } else {
             if (intakeSubsystem.getTopMotorRotations() - startRotations > rotationsUntilStop) {
                 intakeSubsystem.setSpeed(0);
                 this.done = true;
             } else {
-                intakeSubsystem.setSpeed(0.5);
+                intakeSubsystem.setSpeed(configManager.getDouble("intake_notein_speed", 0.3));
 //                if (ledState.equals("off")) {
                     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.GreenStrobe);
 //                    ledState = "strobe";
