@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.utils.CANUtils;
+import frc.robot.utils.ConfigManager;
 import frc.robot.utils.NetworkTableUtils;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -61,9 +62,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setNTSpeed() {
-        System.out.println(NTTune.getDouble("Intake Speed", 0));
-        leftMotor.set(NTTune.getDouble("Intake Speed", 0));
-        rightMotor.set(NTTune.getDouble("Intake Speed", 0));
+        leftMotor.set(ConfigManager.getInstance().get("intake_notein_speed", Double.class, 0.0));
+        rightMotor.set(ConfigManager.getInstance().get("intake_notein_speed", Double.class, 0.0));
     }
 
     /**

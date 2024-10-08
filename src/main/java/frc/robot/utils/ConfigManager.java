@@ -89,7 +89,6 @@ public class ConfigManager {
     }
 
     public void saveDefault() {
-        System.out.println("SAvinign");
         this.json = getDefault();
         this.saveConfig();
     }
@@ -104,7 +103,7 @@ public class ConfigManager {
     public <T> T get(String key, Class<T> type, T defaultValue) {
         if (!NTTune.getTable().getEntry(key).exists()) {
             System.out.println("[WARN] " + key + " does not exist in network tables, creating a setting to " + defaultValue);
-
+            NTTune.setEntry(key, type, defaultValue);
         }
         if (type.equals(Double.class) || type.equals(Integer.class)) {
             return (T) getDouble(key, (double)defaultValue);
