@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ConfigManager {
@@ -37,7 +38,7 @@ public class ConfigManager {
      */
     public ConfigManager() {
         try {
-            if (configFile.createNewFile()) {
+            if (configFile.createNewFile() || configFile.length() == 0) {
                 System.out.println("[INFO] Created tuning file");
                 this.json = this.getDefault();
                 this.saveConfig();
@@ -54,7 +55,7 @@ public class ConfigManager {
      * @return A default json object
      */
     @SuppressWarnings("unchecked")
-    private JSONObject getDefault() {
+    public JSONObject getDefault() {
         JSONObject defaultSettings = new JSONObject();
 
         // INTAKE
@@ -71,6 +72,12 @@ public class ConfigManager {
         defaultSettings.put("placeholder", 0.0);
 
         return defaultSettings;
+    }
+
+    public void saveDefault() {
+        System.out.println("SAvinign");
+        this.json = getDefault();
+        this.saveConfig();
     }
 
     /**
@@ -98,6 +105,7 @@ public class ConfigManager {
      @SuppressWarnings("unchecked")
      public void setDouble(String key, double value) {
         this.json.put(key, value);
+        this.saveConfig();
      }
 
 
@@ -106,10 +114,11 @@ public class ConfigManager {
      */
     public void saveConfig() {
          try {
-             FileWriter fileWrite = new FileWriter(this.configFile);
-             this.json.writeJSONString(fileWrite);
-         } catch (IOException e) {
-             System.out.println("[WARN] Failed to save file: " + configFile);
+             PrintWriter printWriter = new PrintWriter(this.configFile);
+             printWriter.println(this.json.toJSONString());
+             printWriter.close();
+         } catch (FileNotFoundException e) {
+             System.out.println("[WARN] Failed to save file: " + configFile + ": " + e);
          }
     }
 
@@ -119,21 +128,14 @@ public class ConfigManager {
      * @return The parsed config as a {@link JSONObject}
      */
     private JSONObject parseConfig() {
-        StringBuilder data = new StringBuilder();
-        Object parsedObject = new Object();
-
+        JSONObject jObj = new JSONObject();
+        JSONParser parser = new JSONParser();
         try {
-            Scanner scanner = new Scanner(this.configFile);
-            while (scanner.hasNextLine()) {
-                data.append(scanner.nextLine());
-            }
-            scanner.close();
-
-            JSONParser parser = new JSONParser();
-            parsedObject = parser.parse(data.toString());
-        } catch (FileNotFoundException | ParseException e) {
+            Object obj = parser.parse(new FileReader(this.configFile));
+            jObj = (JSONObject) obj;
+        } catch (IOException | ParseException e ) {
             System.out.println("[ERROR] An error occurred: " + e);
         }
-    return (JSONObject) parsedObject;
+    return jObj;
     }
 }
