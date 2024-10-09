@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.27,
-      "y": 5.54
+      "x": 1.4853465126720353,
+      "y": 5.5816792518142755
     },
     "rotation": 0
   },
@@ -32,6 +32,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "path",
+                      "data": {
+                        "pathName": "StartF2_InitialShootCenter"
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "AutoShoot"
@@ -40,7 +46,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "StartF2_InitialShootCenter"
+                        "pathName": "InitialShootCenter_Front2"
                       }
                     },
                     {
@@ -64,49 +70,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Front3_RegularShootB"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "RegularShootB_Back5"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back5_RegularShootB"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "RegularShootB_Back4"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back4_NearStageShoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
+                        "pathName": "Front3_Leave"
                       }
                     }
                   ]
@@ -118,6 +82,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3 Piece",
   "choreoAuto": false
 }

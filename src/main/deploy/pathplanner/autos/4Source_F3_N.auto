@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4770687646844045,
-      "y": 6.980081548053722
+      "x": 1.4923657995741775,
+      "y": 4.0955135208621245
     },
     "rotation": 0
   },
@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "StartF1_InitialShootAmp"
+                        "pathName": "StartF3_InitialShootAmp"
                       }
                     },
                     {
@@ -50,7 +50,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "AutoIntakeContinuous1.5"
+                              "name": "AutoIntakeContinuous4"
                             }
                           },
                           {
@@ -60,67 +60,19 @@
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "InitialShootAmp_Front1"
+                                    "pathName": "InitialShootStage_Front3"
                                   }
                                 },
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "Front1_Back1"
+                                    "pathName": "Front3_Front2_Front1"
                                   }
                                 }
                               ]
                             }
                           }
                         ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back1_RegularShoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "RegularShoot_Back2"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back2_RegularShoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "RegularShoot_Back3"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back3_ShootStage"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
                       }
                     }
                   ]
@@ -132,6 +84,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4 Piece",
   "choreoAuto": false
 }

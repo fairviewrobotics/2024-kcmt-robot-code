@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.27,
-      "y": 5.54
+      "x": 1.4794810811510675,
+      "y": 6.966498018453309
     },
     "rotation": 0
   },
@@ -32,27 +32,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "StartF2_InitialShootCenter"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Front2_Front3"
+                        "pathName": "StartF1_InitialShootAmp"
                       }
                     },
                     {
@@ -62,27 +44,41 @@
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "parallel",
                       "data": {
-                        "pathName": "Front3_RegularShootB"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoIntakeContinuous1.5"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "InitialShootAmp_Front1"
+                                  }
+                                },
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "Front1_Back1"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "RegularShootB_Back5"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back5_RegularShootB"
+                        "pathName": "Back1_RegularShoot"
                       }
                     },
                     {
@@ -100,6 +96,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3 Piece",
   "choreoAuto": false
 }

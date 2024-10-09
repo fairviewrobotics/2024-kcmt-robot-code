@@ -50,9 +50,39 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
-                        "pathName": "Front3_Front2_Front1"
+                        "pathName": "Front1_Front2"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Front2_Front3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Front3_Leave"
                       }
                     }
                   ]
@@ -64,6 +94,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4 Piece",
   "choreoAuto": false
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.29,
-        "y": 5.54
+        "x": 2.2,
+        "y": 5.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.795244854896523,
-        "y": 5.54
+        "x": 2.7052448548965233,
+        "y": 5.57
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "InitialShootCenter"
     },
     {
       "anchor": {
-        "x": 2.901789998024441,
-        "y": 5.54
+        "x": 2.7,
+        "y": 5.57
       },
       "prevControl": {
-        "x": 2.25951262898637,
-        "y": 5.54
+        "x": 2.0577226309619294,
+        "y": 5.57
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Front2"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Start Intake",
-      "waypointRelativePos": 0.35,
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,5 +63,5 @@
   "reversed": false,
   "folder": "ShootToFront",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

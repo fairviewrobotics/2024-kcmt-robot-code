@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.49,
-      "y": 4.101138565845348
+      "x": 1.4770687646844045,
+      "y": 6.980081548053722
     },
     "rotation": 0
   },
@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "StartF3_InitialShootAmp"
+                        "pathName": "StartF1_InitialShootAmp"
                       }
                     },
                     {
@@ -50,7 +50,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "AutoIntakeContinuous4"
+                              "name": "AutoIntakeContinuous1.5"
                             }
                           },
                           {
@@ -60,25 +60,19 @@
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "InitialShootStage_Front3"
+                                    "pathName": "InitialShootAmp_Front1"
                                   }
                                 },
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "Front3_Front2_Front1"
+                                    "pathName": "Front1_Back1"
                                   }
                                 }
                               ]
                             }
                           }
                         ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Front1_Back1"
                       }
                     },
                     {
@@ -120,7 +114,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Back3_ShootStage"
+                        "pathName": "Back3_StageShoot"
                       }
                     },
                     {
@@ -138,6 +132,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "5 Piece",
   "choreoAuto": false
 }
