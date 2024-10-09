@@ -229,6 +229,10 @@ public class RobotContainer {
             new RunCommand(() -> ConfigManager.getInstance().saveDefault())
     );
 
+    new POVButton(secondaryController, 90).whileTrue(
+            new RunCommand(() -> ConfigManager.getInstance().saveDefault())
+    );
+
     // Raise shooter + rotate to amp + spin up for amp: X button
 //    new JoystickButton(secondaryController, XboxController.Button.kX.value).whileTrue(
 //            new ParallelCommandGroup(
@@ -286,7 +290,8 @@ public class RobotContainer {
   }
 
   public void enableInit() {
-    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().getDouble("intake_notein_speed", 0));
+    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().get("intake_notein_speed", Double.class, 0.0));
+
     aimSubsystem.resetPID();
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Off);
   }
@@ -294,8 +299,7 @@ public class RobotContainer {
   public void disableInit() {
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Rainbow);
 
-    // TODO: Instead of doing this here we should be able to use a NetworkTableListener
-    ConfigManager.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
+//    ConfigManager.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
     ConfigManager.getInstance().saveConfig();
   }
 }

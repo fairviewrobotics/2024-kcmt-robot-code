@@ -10,11 +10,11 @@ public class ShooterConstants {
 
     public static final double MOTOR_TO_WHEEL_RATIO = 60.0/36.0; //TODO: tune
 
-    public static final double SPEAKER_RPM = 7500; //TODO: tune
+    public static final double SPEAKER_RPM = 8500; //TODO: tune
 
     public static final double PASS_RPM = 4000; //TODO: tune
 
-    public static final double AMP_RPM = 1500; //TODO: tune
+    public static final double AMP_RPM = 1700; //TODO: tune
 
     public static final int TOP_MOTOR_ID = 10;
 
@@ -32,15 +32,15 @@ public class ShooterConstants {
 
     public static final double SHOOTER_KA = 0;
 
-    public static final double SHOOTER_WHEEL_DIAMETER = 0.07;
+    public static final double SHOOTER_WHEEL_DIAMETER = 0.0444;
     // In meters
-    public static final double SHOOTER_HEIGHT = 0.2;
+    public static final double SHOOTER_HEIGHT = 0.4;
 
     public static final double STAGE_HEIGHT = 2.3;
 
-    public static final Pose3d SPEAKER_POSE_BLUE = new Pose3d(16.5, 5.5, 2.0, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Pose3d SPEAKER_POSE_RED = new Pose3d(16.5, 5.5, 2.0, new Rotation3d(0.0, 0.0, 0.0));
 
-    public static final Pose3d SPEAKER_POSE_RED = new Pose3d(0.0, 5.5, 2.0, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Pose3d SPEAKER_POSE_BLUE = new Pose3d(0.0, 5.5, 2.0, new Rotation3d(0.0, 0.0, 0.0));
 
     public static final Pose2d PASS_POSE_RED = new Pose2d(16.5, 8.0, new Rotation2d(0.0)); //TODO: tune to actual values
 
