@@ -28,6 +28,8 @@ public class AimCommand extends Command {
 
     private final Target target;
 
+    private boolean ampAngleHit = false;
+
     /**
      * Command to aim the shooter
      * @param aimSubsystem Instance of {@link AimSubsystem}
@@ -83,8 +85,9 @@ public class AimCommand extends Command {
     private double calculateAngle(Pose2d robotPose, Target target) {
         switch (target) {
             case AMP -> {
+                if (aimSubsystem.getShooterPos() >= Math.toRadians(95)) ampAngleHit = true;
+                if (ampAngleHit) return Math.toRadians(55);
                 return (controller.getLeftBumper()) ? Math.toRadians(96) : Math.toRadians(85);
-//                return Math.toRadians(96); //TODO: to tune
             }
             case SPEAKER -> {
                 return ShooterUtils.calculateShooterAngle(
