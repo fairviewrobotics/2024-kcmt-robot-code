@@ -46,10 +46,7 @@ public class IntakeCommand extends Command {
                 this.done = true;
             } else {
                 intakeSubsystem.setSpeed(0.3);
-//                if (ledState.equals("off")) {
-                    ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.GreenStrobe);
-//                    ledState = "strobe";
-//                }
+                ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.GreenStrobe);
             }
         }
     }

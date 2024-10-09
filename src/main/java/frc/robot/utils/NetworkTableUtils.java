@@ -35,6 +35,16 @@ public class NetworkTableUtils {
     }
 
     /**
+     * This function gets a value from network tables as a boolean
+     * @param key The key in Network Tables for the value
+     * @param defaultValue If the entry is not found or null we will return this
+     * @return Returns the Network Table entry as a boolean
+     */
+    public boolean getBoolean(String key, boolean defaultValue) {
+        return this.table.getEntry(key).getBoolean(defaultValue);
+    }
+
+    /**
      * This function gets a value from network tables as a String
      * @param key The key in Network Tables for the value
      * @param defaultValue If the entry is not found or null we will return this
@@ -65,6 +75,15 @@ public class NetworkTableUtils {
      */
     public void setDouble(String key, double value) {
         this.table.getEntry(key).setDouble(value);
+    }
+
+    /**
+     * This function sets a double in network tables
+     * @param key The key in Network Tables for the value
+     * @param value What we are setting the entry to
+     */
+    public void setBoolean(String key, boolean value) {
+        this.table.getEntry(key).setBoolean(value);
     }
 
     /**
@@ -100,15 +119,13 @@ public class NetworkTableUtils {
      * @param key The key in Network Tables for the value
      * @param value The value we are setting the entry to.
      */
-        public void setEntry(String key, Object value) {
-            if (this.table.getEntry(key).exists()) {
-                if (value instanceof Double) {
-                    setDouble(key, (Double) value);
-                } else if (value instanceof String) {
-                    setString(key, (String) value);
-                } else  if (value instanceof double[]) {
-                    setDoubleArray(key, (double[]) value);
-                }
+        public <T> void setEntry(String key, Class<T> type ,T value) {
+            if (type.equals(Double.class)) {
+                setDouble(key, (double) value);
+            } else if (type.equals(String.class)) {
+                setString(key, (String) value);
+            } else if (type.equals(Boolean.class)) {
+                setBoolean(key, (boolean) value);
             }
         }
 }
