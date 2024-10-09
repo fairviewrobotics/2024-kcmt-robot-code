@@ -286,7 +286,7 @@ public class RobotContainer {
   }
 
   public void enableInit() {
-    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().getDouble("intake_notein_speed", 0));
+    NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().get("intake_notein_speed", Double.class, 0.0));
     aimSubsystem.resetPID();
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Off);
   }
@@ -294,8 +294,7 @@ public class RobotContainer {
   public void disableInit() {
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Rainbow);
 
-    // TODO: Instead of doing this here we should be able to use a NetworkTableListener
-    ConfigManager.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
+//    ConfigManager.getInstance().setDouble("intake_notein_speed", NTTune.getDouble("intake_notein_speed", 0));
     ConfigManager.getInstance().saveConfig();
   }
 }
