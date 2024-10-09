@@ -39,11 +39,6 @@ public class IntakeCommand extends Command {
         ConfigManager configManager = ConfigManager.getInstance();
         if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
             intakeSubsystem.setSpeed(0.3);
-        } else {
-            intakeSubsystem.setSpeed(0);
-        }
-        if (!this.intakeSubsystem.getFrontLinebreak() || continuous) {
-            intakeSubsystem.setSpeed(0.3);
             startRotations = intakeSubsystem.getTopMotorRotations();
         } else {
             if (intakeSubsystem.getTopMotorRotations() - startRotations > rotationsUntilStop) {
