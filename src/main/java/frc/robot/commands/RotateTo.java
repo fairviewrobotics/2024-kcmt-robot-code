@@ -70,8 +70,8 @@ public class RotateTo extends Command {
 
                 Pose2d robotPose = swerveSubsystem.getPose();
 
-                Pose2d notePose = new Pose2d(robotPose.getX() + Math.cos(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist,
-                        robotPose.getY() + Math.sin(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist, new Rotation2d());
+                Pose2d notePose = new Pose2d(robotPose.getX() - Math.cos(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist,
+                        robotPose.getY() - Math.sin(robotPose.getRotation().getRadians() - Math.toRadians(VisionUtils.getNoteTX() - VisionConstants.NOTE_CAM_OFFSET)) * dist, new Rotation2d());
 
                 NTDebug.setDoubleArray("Note Pose", new double[]{
                         notePose.getX(),
@@ -87,7 +87,7 @@ public class RotateTo extends Command {
 
                 assert DriverStation.getAlliance().isPresent();
 
-                this.rotateToPose = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)? ShooterConstants.SPEAKER_POSE_BLUE.toPose2d() : ShooterConstants.SPEAKER_POSE_RED.toPose2d();
+                this.rotateToPose = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? ShooterConstants.SPEAKER_POSE_BLUE.toPose2d() : ShooterConstants.SPEAKER_POSE_RED.toPose2d();
             }
             case HIGH_PASS, LOW_PASS -> {
                 rotatePID.reset(swerveSubsystem.getPose().getRotation().getRadians());
@@ -126,7 +126,7 @@ public class RotateTo extends Command {
                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? -Math.PI / 2 : Math.PI / 2);
         }
 
-        if ((this.target == Target.NOTE && seeNote) || Math.abs(controller.getRightX()) > 0.05) {
+        if (Math.abs(controller.getRightX()) > 0.05) {
             swerveSubsystem.drive(
                     controller.getLeftY() * DrivetrainConstants.drivingSpeedScalar,
                     controller.getLeftX() * DrivetrainConstants.drivingSpeedScalar,

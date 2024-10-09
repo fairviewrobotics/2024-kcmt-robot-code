@@ -38,7 +38,7 @@ public class DriveCommands extends Command {
         double sidewaysDesired = MathUtil.applyDeadband(sideways.getAsDouble(), 0.03);
         double radiansDesired = MathUtil.applyDeadband(radians.getAsDouble(), 0.03);
 
-        swerveSubsystem.drive(-forwardDesired, -sidewaysDesired, radiansDesired, fieldRelativeFromButton, true);
+        swerveSubsystem.drive(forwardDesired, sidewaysDesired, radiansDesired, fieldRelativeFromButton, true);
     }
 
     @Override

@@ -10,6 +10,7 @@ import frc.robot.constants.AimConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.NetworkTableUtils;
 import frc.robot.utils.ShooterUtils;
 
 public class AimCommand extends Command {
@@ -22,6 +23,8 @@ public class AimCommand extends Command {
     private Pose3d speakerPose;
 
     private Pose2d passPose;
+
+    private NetworkTableUtils NTDebug = new NetworkTableUtils("Debug");
 
     private final Target target;
 
@@ -49,7 +52,7 @@ public class AimCommand extends Command {
 
     @Override
     public void initialize() {
-        aimSubsystem.resetPID();
+      //  aimSubsystem.resetPID();
 
         assert DriverStation.getAlliance().isPresent();
 
@@ -63,10 +66,12 @@ public class AimCommand extends Command {
             aimSubsystem.runRight(0.0);
             aimSubsystem.runLeft(0.0);
         } else {
-            aimSubsystem.setAngle(this.calculateAngle(
+            double angle = this.calculateAngle(
                     swerveSubsystem.getPose(),
                     target
-            ));
+            );
+            NTDebug.setDouble("Aim Angle", angle);
+            aimSubsystem.setAngle(angle);
         }
     }
 
@@ -78,7 +83,8 @@ public class AimCommand extends Command {
     private double calculateAngle(Pose2d robotPose, Target target) {
         switch (target) {
             case AMP -> {
-                return (controller.getLeftBumper()? Math.toRadians(90): Math.toRadians(75)); //TODO: to tune
+                return (controller.getLeftBumper()) ? Math.toRadians(96) : Math.toRadians(85);
+//                return Math.toRadians(96); //TODO: to tune
             }
             case SPEAKER -> {
                 return ShooterUtils.calculateShooterAngle(

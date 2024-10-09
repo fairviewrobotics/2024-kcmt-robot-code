@@ -10,6 +10,7 @@ import org.photonvision.PhotonPoseEstimator;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class VisionUtils {
 
@@ -91,11 +92,12 @@ public class VisionUtils {
      * Gets the distance from the first visible AprilTag
      * @return The distance (in meters) from the AprilTag
      */
-    public static double getDistanceFromTag() {
+    public static double getDistanceFromTagLimelight() {
 
-        Pose3d returnedPose = getBotPoseTargetSpace().get();
+        AtomicReference<Pose3d> returnedPose = new AtomicReference<>(new Pose3d());
+        getBotPoseTargetSpace().ifPresent(returnedPose::set);
 
-        return Math.abs(returnedPose.getZ());
+        return Math.abs(returnedPose.get().getZ());
 
     }
 

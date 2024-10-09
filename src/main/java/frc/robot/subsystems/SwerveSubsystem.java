@@ -198,7 +198,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Add vision measurement to odometry
         Optional<Pose3d> visionMeasurement = VisionUtils.getBotPoseFieldSpace();
 
-        if ((visionMeasurement.isPresent() && VisionUtils.getDistanceFromTag() < 3) || estimatedRobotPose.isPresent()) {
+        if ((visionMeasurement.isPresent() && VisionUtils.getDistanceFromTagLimelight() < 3) || estimatedRobotPose.isPresent()) {
 //            distanceToTag = VisionUtils.getDistanceFromTag();
 //
 //
@@ -232,6 +232,7 @@ public class SwerveSubsystem extends SubsystemBase {
 //                    Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
 //            );
             visionMeasurement.ifPresent(robotPose -> {
+                if (VisionUtils.getDistanceFromTagLimelight() > 3) return;
                 poseEstimator.addVisionMeasurement(
                     robotPose.toPose2d(),
                     Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
@@ -239,6 +240,10 @@ public class SwerveSubsystem extends SubsystemBase {
             });
 
             estimatedRobotPose.ifPresent(robotPose -> {
+<<<<<<< HEAD
+=======
+                if (cam.getCameraTable().getEntry("targetPose").getDoubleArray(new double[]{})[0] - 0.4 > 4 ) return;
+>>>>>>> 019cf408f382c5528509cb761dd6aee01ec8986e
                 poseEstimator.addVisionMeasurement(
                     robotPose.estimatedPose.toPose2d(),
                     robotPose.timestampSeconds
