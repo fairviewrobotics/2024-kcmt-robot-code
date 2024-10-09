@@ -236,11 +236,9 @@ public class SwerveSubsystem extends SubsystemBase {
                     robotPose.toPose2d(),
                     Timer.getFPGATimestamp() - (VisionUtils.getLatencyPipeline()/1000.0) - (VisionUtils.getLatencyCapture()/1000.0)
                 );
-                System.out.println("Adding limelight " + robotPose.toPose2d());
             });
 
             estimatedRobotPose.ifPresent(robotPose -> {
-                System.out.println("Adding photon " + robotPose.estimatedPose.toPose2d());
                 poseEstimator.addVisionMeasurement(
                     robotPose.estimatedPose.toPose2d(),
                     robotPose.timestampSeconds
