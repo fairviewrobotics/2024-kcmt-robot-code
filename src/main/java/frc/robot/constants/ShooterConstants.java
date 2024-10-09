@@ -20,7 +20,7 @@ public class ShooterConstants {
 
     public static final int BOTTOM_MOTOR_ID = 9;
 
-    public static final double SHOOTER_P = 0.0;
+    public static final double SHOOTER_P = 0.02;
 
     public static final double SHOOTER_I = 0;
 

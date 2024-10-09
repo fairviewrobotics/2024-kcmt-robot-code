@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 7.37
+        "x": 2.7,
+        "y": 5.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.62260733505842,
-        "y": 7.922442036290323
+        "x": 3.9215679180983547,
+        "y": 6.475580631071307
       },
       "isLocked": false,
-      "linkedName": "StartAmp"
+      "linkedName": "Front2"
     },
     {
       "anchor": {
-        "x": 8.04,
-        "y": 7.4
+        "x": 8.11434183213194,
+        "y": 5.848412154095672
       },
       "prevControl": {
-        "x": 6.5317811934452,
-        "y": 7.724712934777433
+        "x": 5.976632429276853,
+        "y": 6.521061764012584
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Back1"
+      "linkedName": "Back2"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "StartIntake",
-      "waypointRelativePos": 0.7,
+      "name": "Start Intake",
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,11 +57,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -8.186705811208201,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "StartToBack",
+  "folder": "FrontToBack",
   "previewStartingState": null,
   "useDefaultConstraints": true
 }

@@ -1,0 +1,117 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5000100914744554,
+      "y": 1.4855407259540148
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoSpinUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoAim"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "InitialSource_Back5"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back5_StageShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "StageShoot_Back4"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back4_StageShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "StageShoot_Back3"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back3_StageShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "StageShoot_Back2"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back2_RegularShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 Piece",
+  "choreoAuto": false
+}

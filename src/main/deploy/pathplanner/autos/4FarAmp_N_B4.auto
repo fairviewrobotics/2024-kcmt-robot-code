@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.49,
-      "y": 4.101138565845348
+      "x": 1.4894811611212424,
+      "y": 7.386116758740265
     },
     "rotation": 0
   },
@@ -34,51 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "StartF3_InitialShootAmp"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "AutoIntakeContinuous4"
-                            }
-                          },
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "InitialShootStage_Front3"
-                                  }
-                                },
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "Front3_Front2_Front1"
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Front1_Back1"
+                        "pathName": "InitialAmp_Back1"
                       }
                     },
                     {
@@ -120,13 +76,25 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Back3_ShootStage"
+                        "pathName": "Back3_StageShoot"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
                         "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "StageShoot_Back4"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back4_StageShoot"
                       }
                     }
                   ]
@@ -138,6 +106,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4 Piece",
   "choreoAuto": false
 }

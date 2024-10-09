@@ -40,7 +40,7 @@ public class SpinUpCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        shooterSubsystem.setShooterSpeed(0);
+        shooterSubsystem.runVolts(0.0);
     }
 
     @Override

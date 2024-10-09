@@ -1,0 +1,89 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4923657995741775,
+      "y": 4.0955135208621245
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoSpinUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoAim"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "StartF3_InitialShootAmp"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoIntakeContinuous4"
+                            }
+                          },
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "InitialShootStage_Front3"
+                                  }
+                                },
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "Front3_Front2_Front1"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 Piece",
+  "choreoAuto": false
+}

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4770687646844045,
-      "y": 6.980081548053722
+      "x": 1.4891446199684,
+      "y": 5.565092580709899
     },
     "rotation": 0
   },
@@ -34,51 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "StartF1_InitialShootAmp"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShoot"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "AutoIntakeContinuous1.5"
-                            }
-                          },
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "InitialShootAmp_Front1"
-                                  }
-                                },
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "Front1_Back1"
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back1_RegularShoot"
+                        "pathName": "StartF2_InitialShootCenter"
                       }
                     },
                     {
@@ -90,13 +46,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "RegularShoot_Back2"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back2_RegularShoot"
+                        "pathName": "InitialShootCenter_Front2"
                       }
                     },
                     {
@@ -108,13 +58,25 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "RegularShoot_Back3"
+                        "pathName": "Front2_Front3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShoot"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Back3_ShootStage"
+                        "pathName": "Front3_Back5"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Back5_StageShoot"
                       }
                     },
                     {
@@ -132,6 +94,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4 Piece",
   "choreoAuto": false
 }

@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.582648143811913,
+        "y": 4.195589816960884
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.0904395084652232,
+        "y": 2.468433201484094
+      },
+      "isLocked": false,
+      "linkedName": "Front3"
+    },
+    {
+      "anchor": {
+        "x": 7.223853941710882,
+        "y": 1.4774637382857965
+      },
+      "prevControl": {
+        "x": 5.126914095657276,
+        "y": 1.1198647247369455
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SourceLeave"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "FrontToLeave",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}
