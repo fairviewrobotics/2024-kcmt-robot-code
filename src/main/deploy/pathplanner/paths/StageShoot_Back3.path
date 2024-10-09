@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 7.37
+        "x": 4.3832062251830655,
+        "y": 4.925424003771546
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.62260733505842,
-        "y": 7.922442036290323
+        "x": 5.521840819072263,
+        "y": 4.149116901749428
       },
       "isLocked": false,
-      "linkedName": "StartAmp"
+      "linkedName": "StageShootPosition"
     },
     {
       "anchor": {
-        "x": 8.04,
-        "y": 7.4
+        "x": 8.18,
+        "y": 4.24
       },
       "prevControl": {
-        "x": 6.5317811934452,
-        "y": 7.724712934777433
+        "x": 5.915232167378398,
+        "y": 3.8857495048974475
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Back1"
+      "linkedName": "Back3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "StartIntake",
+      "name": "Start Intake",
       "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "AutoIntake"
+                "name": "Start Intake"
               }
             }
           ]
@@ -57,11 +57,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -12.670101917935723,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "StartToBack",
+  "folder": "ShootToBack",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

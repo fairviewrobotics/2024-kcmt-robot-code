@@ -38,7 +38,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Start Intake",
       "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",

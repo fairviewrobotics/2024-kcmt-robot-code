@@ -163,7 +163,7 @@ public class RobotContainer {
 //            new SpinUpCommand(Target.SPEAKER, shooterSubsystem)
 //    );
     new JoystickButton(secondaryController, XboxController.Button.kLeftBumper.value).whileTrue(
-      new SpinUpCommand(shooterSubsystem, Target.SPEAKER)
+            new SpinUpCommand(shooterSubsystem, Target.SPEAKER)
     );
 
 
@@ -204,7 +204,7 @@ public class RobotContainer {
     new JoystickButton(secondaryController, XboxController.Button.kRightBumper.value).whileTrue(
 //            new ParallelCommandGroup(
 //                    new RotateTo(swerveSubsystem, primaryController, Target.NOTE),
-                    new IntakeCommand(intakeSubsystem, ledSubsystem, false)
+            new IntakeCommand(intakeSubsystem, ledSubsystem, false)
 //            )
     );
 
@@ -213,16 +213,20 @@ public class RobotContainer {
     );
 
     new POVButton(secondaryController, 0).whileTrue(
-        new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
+            new RunCommand(() -> intakeSubsystem.setSpeed(-0.3))
     ).whileFalse(
-        new RunCommand(() -> intakeSubsystem.setSpeed(0.0))
+            new RunCommand(() -> intakeSubsystem.setSpeed(0.0))
     );
 
     new POVButton(secondaryController, 180).whileTrue(
-             new RunCommand(() -> {
-               aimSubsystem.resetEncoder();
-               aimSubsystem.resetPID();
-             })
+            new RunCommand(() -> {
+              aimSubsystem.resetEncoder();
+              aimSubsystem.resetPID();
+            })
+    );
+
+    new POVButton(secondaryController, 90).whileTrue(
+            new RunCommand(() -> ConfigManager.getInstance().saveDefault())
     );
 
     new POVButton(secondaryController, 90).whileTrue(
@@ -287,6 +291,7 @@ public class RobotContainer {
 
   public void enableInit() {
     NTTune.setDouble("intake_notein_speed", ConfigManager.getInstance().get("intake_notein_speed", Double.class, 0.0));
+
     aimSubsystem.resetPID();
     ledSubsystem.setAnimation(LEDSubsystem.AnimationTypes.Off);
   }

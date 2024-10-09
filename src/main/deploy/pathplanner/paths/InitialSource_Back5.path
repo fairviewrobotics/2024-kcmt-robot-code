@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 7.37
+        "x": 1.5028466526198414,
+        "y": 1.4958292697694837
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.62260733505842,
-        "y": 7.922442036290323
+        "x": 2.50284665261984,
+        "y": 0.9958292697694837
       },
       "isLocked": false,
-      "linkedName": "StartAmp"
+      "linkedName": "StartSource"
     },
     {
       "anchor": {
-        "x": 8.04,
-        "y": 7.4
+        "x": 7.956846206661163,
+        "y": 0.7549030283607442
       },
       "prevControl": {
-        "x": 6.5317811934452,
-        "y": 7.724712934777433
+        "x": 5.5803428149737195,
+        "y": 0.840921328583251
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Back1"
+      "linkedName": "Back5"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "StartIntake",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {

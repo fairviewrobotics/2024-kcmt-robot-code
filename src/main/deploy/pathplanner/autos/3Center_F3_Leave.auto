@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.49,
-      "y": 7.374600271661481
+      "x": 1.4853465126720353,
+      "y": 5.5816792518142755
     },
     "rotation": 0
   },
@@ -34,13 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "InitialAmp_Back1"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back1_RegularShoot"
+                        "pathName": "StartF2_InitialShootCenter"
                       }
                     },
                     {
@@ -52,13 +46,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "RegularShoot_Back2"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back2_RegularShoot"
+                        "pathName": "InitialShootCenter_Front2"
                       }
                     },
                     {
@@ -70,13 +58,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "RegularShoot_Back3"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back3_ShootStage"
+                        "pathName": "Front2_Front3"
                       }
                     },
                     {
@@ -88,13 +70,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "StageShoot_Back4"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Back4_StageShoot"
+                        "pathName": "Front3_Leave"
                       }
                     }
                   ]
@@ -106,6 +82,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3 Piece",
   "choreoAuto": false
 }
