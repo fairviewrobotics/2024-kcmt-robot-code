@@ -240,10 +240,9 @@ public class SwerveSubsystem extends SubsystemBase {
             });
 
             estimatedRobotPose.ifPresent(robotPose -> {
-<<<<<<< HEAD
-=======
+
                 if (cam.getCameraTable().getEntry("targetPose").getDoubleArray(new double[]{})[0] - 0.4 > 4 ) return;
->>>>>>> 019cf408f382c5528509cb761dd6aee01ec8986e
+
                 poseEstimator.addVisionMeasurement(
                     robotPose.estimatedPose.toPose2d(),
                     robotPose.timestampSeconds
